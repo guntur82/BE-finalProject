@@ -16,7 +16,9 @@ const Register = () => {
     gambar: '',
     alamat: '',
   });
-
+  function isValidEmail(email) {
+    return /\S+@\S+\.\S+/.test(email);
+  }
   const [img, setImg] = useState();
   const onImageChange = (e) => {
     const [file] = e.target.files;
@@ -26,14 +28,39 @@ const Register = () => {
 
   const submitHandler = () => {
     // buat redirect
-    form.password === form.password2nd
-      ? registerUser(form)
-      : Swal.fire({
+
+    if (isValidEmail(form.email)) {
+      if (form.password === form.password2nd) {
+        registerUser(form, (result) => {
+          if (result.data.name) {
+            Swal.fire(
+              'Add User',
+              'User ' + result.data.email + ' berhasil ditambahkan',
+              'success'
+            );
+            navigation('/');
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: result.data,
+            });
+          }
+        });
+      } else {
+        Swal.fire({
           icon: 'error',
           title: 'Oops...',
           text: 'Password tidak sama',
         });
-    navigation('/');
+      }
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Pastikan email anda benar',
+      });
+    }
   };
   return (
     <>

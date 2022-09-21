@@ -3,20 +3,15 @@ import Swal from 'sweetalert2';
 
 const URL = 'http://localhost:3000/api/user';
 
-const registerUser = async (data) => {
+const registerUser = async (data, cb) => {
   try {
-    console.log(data);
     let result = await axios({
       method: 'POST',
       url: URL,
       data: data,
       headers: { 'content-type': 'multipart/form-data' },
     });
-    Swal.fire(
-      'Add User',
-      'User ' + result.data.name + ' has been add',
-      'success'
-    );
+    cb(result);
   } catch (error) {
     console.log(error);
   }

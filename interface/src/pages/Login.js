@@ -9,16 +9,27 @@ const Login = () => {
     email: '',
     password: '',
   });
+  function isValidEmail(email) {
+    return /\S+@\S+\.\S+/.test(email);
+  }
   const loginUser = async () => {
     try {
-      let result = await axios({
-        method: 'POST',
-        url: 'http://localhost:3000/api/user/login',
-        data: form,
-      });
-      localStorage.setItem('access_token', result.data.access_token);
-      Swal.fire('Login Success', '', 'success');
-      navigate('/home');
+      if (!isValidEmail(form.email)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Pastikan email anda benar',
+        });
+      } else {
+        let result = await axios({
+          method: 'POST',
+          url: 'http://localhost:3000/api/user/login',
+          data: form,
+        });
+        localStorage.setItem('access_token', result.data.access_token);
+        Swal.fire('Login Success', '', 'success');
+        navigate('/home');
+      }
     } catch (error) {
       console.log(error);
     }

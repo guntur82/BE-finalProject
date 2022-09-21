@@ -1,5 +1,5 @@
-// const { user } = require('../models');
 const { user } = require('../models');
+const fs = require('fs');
 const { decryptPass } = require('../helpers/bcrypt');
 const { tokenGenerator, tokenVerifier } = require('../helpers/jsonwebtoken');
 
@@ -40,17 +40,27 @@ class UserController {
   static async register(req, res) {
     try {
       const { name, email, password, no_hp, level, alamat } = req.body;
+      const emailExist = await user.findOne({ where: { email } });
       let gambar = req.file ? req.file.path : '';
-      let result = await user.create({
-        name,
-        email,
-        password,
-        no_hp,
-        level,
-        alamat,
-        gambar,
-      });
-      res.status(201).json(result);
+      if (emailExist !== null) {
+        if (fs.existsSync(`${__dirname}/../${gambar}`)) {
+          fs.unlink(`${__dirname}/../${gambar}`, () => {
+            console.log('file has been deleted');
+          });
+        }
+        res.status(201).json('Email Sudah Digunakan');
+      } else {
+        let result = await user.create({
+          name,
+          email,
+          password,
+          no_hp,
+          level,
+          alamat,
+          gambar,
+        });
+        res.status(201).json(result);
+      }
     } catch (error) {
       res.status(500).json(error);
     }
