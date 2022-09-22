@@ -12,13 +12,14 @@ class UserController {
       res.status(500).json(error);
     }
   }
+  // login admin
   static async login(req, res) {
     try {
       const { email, password } = req.body;
       let emailFound = await user.findOne({
         where: { email },
       });
-      if (emailFound) {
+      if (emailFound && emailFound.level === 'Admin') {
         if (decryptPass(password, emailFound.password)) {
           let access_token = tokenGenerator(emailFound);
           res.status(200).json({
@@ -41,14 +42,14 @@ class UserController {
     try {
       const { name, email, password, no_hp, level, alamat } = req.body;
       const emailExist = await user.findOne({ where: { email } });
-      let gambar = req.file ? req.file.path : '';
+      let gambar = req.file ? req.file.filename : '';
       if (emailExist !== null) {
-        if (fs.existsSync(`${__dirname}/../${gambar}`)) {
-          fs.unlink(`${__dirname}/../${gambar}`, () => {
+        if (fs.existsSync(`${__dirname}/../public/uploads/${gambar}`)) {
+          fs.unlink(`${__dirname}/../public/uploads/${gambar}`, () => {
             console.log('file has been deleted');
           });
         }
-        res.status(201).json('Email Sudah Digunakan');
+        res.status(201).json('email');
       } else {
         let result = await user.create({
           name,
@@ -68,13 +69,46 @@ class UserController {
   static async updateUser(req, res) {
     try {
       const id = +req.params.id;
-      let result = await user.update(req.body, {
-        where: { id },
-        individualHooks: true,
-      });
+      const { email, name, password, no_hp, level, alamat } = req.body;
+      let dataExist = await user.findOne({ where: id });
+      let existPassword = '';
+      password === undefined
+        ? (existPassword = dataExist.password)
+        : (existPassword = password);
+      let gambar = '';
+      if (req.file) {
+        gambar = req.file.filename;
+        if (
+          fs.existsSync(`${__dirname}/../public/uploads/${dataExist.gambar}`)
+        ) {
+          fs.unlink(
+            `${__dirname}/../public/uploads/${dataExist.gambar}`,
+            () => {
+              console.log('file has been deleted');
+            }
+          );
+        }
+      } else {
+        gambar = dataExist.gambar;
+      }
+      let result = await user.update(
+        {
+          email,
+          name,
+          password: existPassword,
+          gambar,
+          no_hp,
+          level,
+          alamat,
+        },
+        {
+          where: { id },
+          individualHooks: true,
+        }
+      );
       result[0] === 1
         ? res.status(200).json({
-            message: `User id ${id} has been updated`,
+            message: `success`,
           })
         : // 404 not found
           res.status(404).json({
@@ -87,6 +121,19 @@ class UserController {
   static async deleteUser(req, res) {
     try {
       const id = +req.params.id;
+      let dataExist = await user.findOne({ where: { id } });
+      if (dataExist) {
+        if (
+          fs.existsSync(`${__dirname}/../public/uploads/${dataExist.gambar}`)
+        ) {
+          fs.unlink(
+            `${__dirname}/../public/uploads/${dataExist.gambar}`,
+            () => {
+              console.log('file has been deleted');
+            }
+          );
+        }
+      }
       let result = await user.destroy({ where: { id } });
       result === 1
         ? res.status(200).json({
@@ -106,6 +153,16 @@ class UserController {
       // let result = await user.findByPk(id);
       let verifyToken = tokenVerifier(req.body.token);
       res.status(200).json(verifyToken);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
+
+  static async detailUser(req, res) {
+    try {
+      const id = +req.params.id;
+      let result = await user.findByPk(id);
+      res.status(200).json(result);
     } catch (error) {
       res.status(500).json(error);
     }

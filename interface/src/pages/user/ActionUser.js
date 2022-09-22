@@ -1,33 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { registerUser } from '../axios/userAxios';
-import '../App.css';
+import Navbar from '../../components/Navbar';
+import { dataUser, registerUser, updateUser } from '../../axios/userAxios';
+import { useNavigate, useParams } from 'react-router-dom';
+import '../../App.css';
 import Swal from 'sweetalert2';
 
-const Register = () => {
+const ActionUser = () => {
   const navigation = useNavigate();
   const [form, setForm] = useState({
     name: '',
     email: '',
     password: '',
     password2nd: '',
-    no_hp: 0,
-    level: 'Admin',
+    no_hp: '',
     gambar: '',
+    level: '',
     alamat: '',
   });
+
+  const params = useParams();
+  const { id } = params;
+  useEffect(() => {
+    if (id) {
+      dataUser(+id, (result) => {
+        setForm({
+          name: result.name,
+          email: result.email,
+          no_hp: result.no_hp,
+          level: result.level,
+          alamat: result.alamat,
+        });
+      });
+    }
+  }, []);
   function isValidEmail(email) {
     return /\S+@\S+\.\S+/.test(email);
   }
-  const [loginStatus, setLoginStatus] = useState(false);
-  useEffect(() => {
-    if (localStorage.getItem('access_token')) {
-      setLoginStatus(true);
-      navigation('/home');
-    } else {
-      setLoginStatus(false);
-    }
-  }, [loginStatus]);
   const [img, setImg] = useState();
   const onImageChange = (e) => {
     const [file] = e.target.files;
@@ -39,18 +47,35 @@ const Register = () => {
     // buat redirect
     if (isValidEmail(form.email)) {
       if (form.password === form.password2nd) {
-        registerUser(form, (result) => {
-          if (result.data.name) {
-            Swal.fire('Success', 'Berhasil membuat akun', 'success');
-            navigation('/');
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: result.data,
+        id
+          ? updateUser(id, form, (result) => {
+              if (result.data.message === 'success') {
+                Swal.fire('Success', 'Pembaharuan berhasil', 'success').then(
+                  () => {
+                    navigation('/user');
+                  }
+                );
+              } else {
+                console.log(result);
+              }
+            })
+          : registerUser(form, (result) => {
+              if (result.data.name) {
+                Swal.fire('Success', 'Berhasil membuat akun', 'success').then(
+                  () => {
+                    navigation('/user');
+                  }
+                );
+              } else if (result.data === 'email') {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: 'Email sudah digunakan!',
+                });
+              } else {
+                console.log(result);
+              }
             });
-          }
-        });
       } else {
         Swal.fire({
           icon: 'error',
@@ -68,6 +93,7 @@ const Register = () => {
   };
   return (
     <>
+      <Navbar></Navbar>
       <div className="container">
         <div className="row">
           <div className="col-md-6 offset-md-3">
@@ -83,6 +109,7 @@ const Register = () => {
                     onChange={(e) =>
                       setForm({ ...form, email: e.target.value })
                     }
+                    value={form.email}
                     placeholder="Email..."
                   />
                 </div>
@@ -91,6 +118,7 @@ const Register = () => {
                     type="text"
                     className="form-control"
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    value={form.name}
                     placeholder="Name..."
                   />
                 </div>
@@ -121,6 +149,7 @@ const Register = () => {
                     onChange={(e) =>
                       setForm({ ...form, no_hp: e.target.value })
                     }
+                    value={form.no_hp}
                     placeholder="Phone..."
                   />
                 </div>
@@ -131,8 +160,23 @@ const Register = () => {
                     onChange={(e) =>
                       setForm({ ...form, alamat: e.target.value })
                     }
+                    value={form.alamat}
                     placeholder="Alamat..."
                   />
+                </div>
+                <div className="mb-3">
+                  <label>Level :</label>
+                  <select
+                    className="form-select"
+                    onChange={(e) =>
+                      setForm({ ...form, level: e.target.value })
+                    }
+                    value={form.level}
+                  >
+                    <option value="">-Pilih Level-</option>
+                    <option value="Admin">Admin</option>
+                    <option value="User">User</option>
+                  </select>
                 </div>
                 <div className="mb-3">
                   <label>Gambar :</label>
@@ -165,4 +209,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default ActionUser;

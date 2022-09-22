@@ -3,9 +3,8 @@ import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
-const Navbar = (props) => {
-  const { status } = props;
-  const API_img = 'http://localhost:3000/uploads/';
+const Navbar = () => {
+  // const API_img = 'http://localhost:3000/uploads/';
   const [loginStatus, setLoginStatus] = useState(false);
   const loginCbHanddler = (result) => {
     setLoginStatus(result);
@@ -15,10 +14,8 @@ const Navbar = (props) => {
     if (localStorage.getItem('access_token')) {
       setLoginStatus(true);
     } else {
-      if (status) {
-        navigate('/login');
-      }
       setLoginStatus(false);
+      navigate('/');
     }
   }, [loginStatus]);
   // const { loginStatus, loginCbHanddler } = props;
@@ -47,7 +44,7 @@ const Navbar = (props) => {
     <>
       <nav className="navbar navbar-expand-lg bg-light">
         <div className="container-fluid">
-          <Link className="navbar-brand" to={'/'}>
+          <Link className="navbar-brand" to={'/home'}>
             Home
           </Link>
           <button
@@ -64,20 +61,23 @@ const Navbar = (props) => {
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav ms-auto">
               <li className="nav-item">
-                <Link
-                  className="nav-link active"
-                  aria-current="page"
-                  to={
-                    localStorage.getItem('access_token') ? '/posting' : '/login'
-                  }
-                >
-                  Posting
+                <Link className="nav-link" to="/brand">
+                  Brand
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/about">
-                  About
+                <Link className="nav-link" to="/user">
+                  User
                 </Link>
+              </li>
+              <li className="nav-item">
+                <a
+                  className={'nav-link'}
+                  href="#"
+                  onClick={() => logoutHandler()}
+                >
+                  Logout
+                </a>
               </li>
             </ul>
           </div>

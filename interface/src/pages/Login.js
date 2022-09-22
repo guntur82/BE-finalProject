@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
@@ -12,6 +12,15 @@ const Login = () => {
   function isValidEmail(email) {
     return /\S+@\S+\.\S+/.test(email);
   }
+  const [loginStatus, setLoginStatus] = useState(false);
+  useEffect(() => {
+    if (localStorage.getItem('access_token')) {
+      setLoginStatus(true);
+      navigate('/home');
+    } else {
+      setLoginStatus(false);
+    }
+  }, [loginStatus]);
   const loginUser = async () => {
     try {
       if (!isValidEmail(form.email)) {
@@ -26,11 +35,25 @@ const Login = () => {
           url: 'http://localhost:3000/api/user/login',
           data: form,
         });
+        console.log(result);
         localStorage.setItem('access_token', result.data.access_token);
-        Swal.fire('Login Success', '', 'success');
+        Swal.fire('Login Berhasil', '', 'success');
         navigate('/home');
       }
     } catch (error) {
+      if (error.message === 'Request failed with status code 404') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Email tidak ditemukan!',
+        });
+      } else if (error.message === 'Request failed with status code 403') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Pastikan password anda benar!',
+        });
+      }
       console.log(error);
     }
   };

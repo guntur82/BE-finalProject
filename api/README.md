@@ -11,6 +11,20 @@ npx sequelize-cli model:generate --name user --attributes email:string,name:stri
 
 npx sequelize-cli model:generate --name item --attributes name:string,harga:integer,gambar:string,deskripsi:string,tanggal:string,stok:integer,userId:integer,brandId:integer
 
+npx sequelize-cli model:generate --name wishList --attributes userId:integer,itemId:integer
+
+npx sequelize-cli model:generate --name historyItem --attributes jumlah:integer,tanggal:string,userId:integer,itemId:integer
+
+npx sequelize-cli model:generate --name warna --attributes nama_warna:string
+
+npx sequelize-cli model:generate --name kodeWarna --attributes itemId:integer,warnaId:integer
+
+npx sequelize-cli model:generate --name brand --attributes nama:string,logo:string
+
+npx sequelize-cli model:generate --name cart --attributes tanggal:string,jumlah:integer,ratting:integer,status_barang:integer,status_pengiriman:integer,userId:integer,itemId:integer
+
+npx sequelize-cli model:generate --name transaksi --attributes tanggal:string,kode_transaksi:string,totalHarga:integer,cartId:integer
+
 ```
 
 ### End Point
