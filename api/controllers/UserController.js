@@ -1,6 +1,6 @@
 const { user } = require('../models');
 const fs = require('fs');
-const { decryptPass } = require('../helpers/bcrypt');
+const { decryptPass, encryptPass } = require('../helpers/bcrypt');
 const { tokenGenerator, tokenVerifier } = require('../helpers/jsonwebtoken');
 
 class UserController {
@@ -74,7 +74,7 @@ class UserController {
       let existPassword = '';
       password === undefined
         ? (existPassword = dataExist.password)
-        : (existPassword = password);
+        : (existPassword = encryptPass(password));
       let gambar = '';
       if (req.file) {
         gambar = req.file.filename;
@@ -121,7 +121,7 @@ class UserController {
   static async deleteUser(req, res) {
     try {
       const id = +req.params.id;
-      let dataExist = await user.findOne({ where: { id } });
+      let dataExist = await user.findByPk(id);
       if (dataExist) {
         if (
           fs.existsSync(`${__dirname}/../public/uploads/${dataExist.gambar}`)

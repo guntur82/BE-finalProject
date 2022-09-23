@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class warna extends Model {
     /**
@@ -11,13 +9,17 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      warna.belongsToMany(models.item, { through: models.kodeWarna });
     }
   }
-  warna.init({
-    nama_warna: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'warna',
-  });
+  warna.init(
+    {
+      nama_warna: DataTypes.STRING,
+    },
+    {
+      sequelize,
+      modelName: 'warna',
+    }
+  );
   return warna;
 };

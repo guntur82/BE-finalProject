@@ -10,6 +10,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      user.hasMany(models.item);
+      user.hasMany(models.wishList);
+      user.hasMany(models.historyItem);
+      user.hasMany(models.cart);
     }
   }
   user.init(
@@ -25,9 +29,6 @@ module.exports = (sequelize, DataTypes) => {
     {
       hooks: {
         beforeCreate: function (user, options) {
-          user.password = encryptPass(user.password);
-        },
-        beforeUpdate: function (user, options) {
           user.password = encryptPass(user.password);
         },
       },

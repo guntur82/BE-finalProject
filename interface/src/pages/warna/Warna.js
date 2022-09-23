@@ -3,16 +3,14 @@ import Navbar from '../../components/Navbar';
 import LoadingBar from '../../helpers/LoadingBar';
 import { Link } from 'react-router-dom';
 import { FiPlusSquare } from 'react-icons/fi';
-import { deleteBrand, getBrand } from '../../axios/brandAxios';
-
-const Brand = () => {
-  const API_img = 'http://localhost:3000/uploads/';
-  const [brand, setBrand] = useState([]);
+import { deleteWarna, getWarna } from '../../axios/warnaAxios';
+const Warna = () => {
+  const [warna, setWarna] = useState([]);
   useEffect(() => {
-    getBrand((result) => setBrand(result));
+    getWarna((result) => setWarna(result));
   }, []);
   const deleteHandler = (id) => {
-    deleteBrand(id);
+    deleteWarna(id);
   };
   return (
     <>
@@ -20,11 +18,11 @@ const Brand = () => {
       <div className="row my-3 text-center">
         <div className="col-9 mx-auto">
           <div className="w-100">
-            <Link to="/brand/create" className="btn btn-sm btn-primary my-2">
+            <Link to="/warna/create" className="btn btn-sm btn-primary my-2">
               <span className="me-2">
                 <FiPlusSquare></FiPlusSquare>
               </span>
-              Tambah brand
+              Tambah warna
             </Link>
           </div>
           <div className="w-100">
@@ -32,31 +30,43 @@ const Brand = () => {
               <thead>
                 <tr className="table-primary">
                   <th>No</th>
-                  <th>Nama Brand</th>
-                  <th>Logo</th>
+                  <th>Warna</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {brand.length > 0 ? (
-                  brand.map((brands, key) => {
-                    const { id, nama, logo } = brands;
+                {warna.length > 0 ? (
+                  warna.map((warnas, key) => {
+                    const { id, nama_warna } = warnas;
                     return (
                       <tr key={id}>
                         <td>{key + 1}</td>
-                        <td>{nama}</td>
                         <td>
-                          <img
-                            alt="gambar"
-                            src={logo ? API_img + logo : ''}
-                            className="img-thumbnail"
-                            width={logo ? '100' : 0}
-                            height={logo ? '100' : 0}
-                          />
+                          {/* <input
+                            style={{
+                              backgroundColor: nama_warna,
+                              borderColor: 'black',
+                            }}
+                            type="checkbox"
+                            className="form-check-input"
+                          /> */}
+                          <div className="pallete">
+                            <div className="kotak">
+                              <div
+                                className="box"
+                                style={{
+                                  backgroundColor: nama_warna,
+                                  borderColor: 'black',
+                                }}
+                              >
+                                <p>{nama_warna}</p>
+                              </div>
+                            </div>
+                          </div>
                         </td>
                         <td>
                           <Link
-                            to={`/brand/edit/${id}`}
+                            to={`/warna/edit/${id}`}
                             className="btn btn-sm btn-info"
                           >
                             Edit
@@ -83,4 +93,4 @@ const Brand = () => {
   );
 };
 
-export default Brand;
+export default Warna;

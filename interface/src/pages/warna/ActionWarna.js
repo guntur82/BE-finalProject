@@ -3,56 +3,46 @@ import Navbar from '../../components/Navbar';
 import '../../App.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { addBrand, editBrand, informationBrand } from '../../axios/brandAxios';
+import { addWarna, editWarna, informationWarna } from '../../axios/warnaAxios';
 
-const ActionBrand = () => {
+const ActionWarna = () => {
   const navigation = useNavigate();
   const [form, setForm] = useState({
-    nama: '',
-    gambar: '',
+    nama_warna: '#000000',
   });
-
   const params = useParams();
   const { id } = params;
   useEffect(() => {
     if (id) {
-      informationBrand(+id, (result) => {
+      informationWarna(+id, (result) => {
         setForm({
-          nama: result.nama,
+          nama_warna: result.nama_warna,
         });
       });
     }
   }, []);
-  const [img, setImg] = useState();
-  const onImageChange = (e) => {
-    const [file] = e.target.files;
-    setImg({ preview: URL.createObjectURL(file), file: file });
-    setForm({ ...form, gambar: e.target.files[0] });
-  };
   const submitHandler = () => {
     // buat redirect
     id
-      ? editBrand(id, form, (result) => {
+      ? editWarna(id, form, (result) => {
           if (result.data.message === 'success') {
             Swal.fire('Success', 'Pembaharuan berhasil', 'success').then(() => {
-              navigation('/brand');
+              navigation('/warna');
             });
           } else {
             console.log(result);
           }
         })
-      : addBrand(form, (result) => {
-          if (result.data.nama) {
-            Swal.fire('Success', 'Berhasil membuat akun', 'success').then(
-              () => {
-                navigation('/brand');
-              }
-            );
-          } else if (result.data === 'logo') {
+      : addWarna(form, (result) => {
+          if (result.data.message === 'success') {
+            Swal.fire('Success', 'Berhasil menambahkan', 'success').then(() => {
+              navigation('/warna');
+            });
+          } else if (result.data === 'warna') {
             Swal.fire({
               icon: 'error',
               title: 'Oops...',
-              text: 'Nama logo sudah digunakan!',
+              text: 'Warna sudah tersedia!',
             });
           } else {
             console.log(result);
@@ -68,29 +58,17 @@ const ActionBrand = () => {
             <div className="card my-5">
               <div className="card-body cardbody-color p-lg-5">
                 <div className="text-center">
-                  <h3>Brand</h3>
+                  <h3>Warna</h3>
                 </div>
                 <div className="mb-3">
                   <input
-                    type="text"
+                    type="color"
                     className="form-control"
-                    onChange={(e) => setForm({ ...form, nama: e.target.value })}
-                    value={form.nama}
+                    onChange={(e) =>
+                      setForm({ ...form, nama_warna: e.target.value })
+                    }
+                    value={form.nama_warna}
                     placeholder="Name..."
-                  />
-                </div>
-                <div className="mb-3">
-                  <label>Logo :</label>
-                  <input
-                    onChange={onImageChange}
-                    type="file"
-                    className="form-control"
-                  />
-                  <img
-                    src={img ? img.preview : ''}
-                    className="img-thumbnail"
-                    width={img ? '200' : 0}
-                    height={img ? '200' : 0}
                   />
                 </div>
                 <div className="text-center">
@@ -110,4 +88,4 @@ const ActionBrand = () => {
   );
 };
 
-export default ActionBrand;
+export default ActionWarna;

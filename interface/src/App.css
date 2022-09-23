@@ -65,3 +65,18 @@ a {
   margin: 0 auto;
   box-shadow: 0 4px 8px 0 #50595c;
 }
+
+/* kotak */
+.pallete .box p {
+  margin-left: 25px;
+  margin-top: 1px;
+  display: block;
+}
+.pallete .box {
+  /* display: inline-block; */
+  margin-bottom: 20px;
+  width: 20px;
+  height: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+/* end kotak */

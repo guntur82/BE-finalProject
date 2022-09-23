@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../../components/Navbar';
+import '../../App.css';
 import { dataUser, registerUser, updateUser } from '../../axios/userAxios';
 import { useNavigate, useParams } from 'react-router-dom';
-import '../../App.css';
 import Swal from 'sweetalert2';
 
 const ActionUser = () => {
