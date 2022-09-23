@@ -29,6 +29,9 @@ const ActionItem = () => {
     getWarna((result_warna) => setWarna(result_warna));
     if (id) {
       getDetailListItemWarna(+id, (result_kode_warna) =>
+        //   setKodeWarna(result_kode_warna)
+        // );
+
         result_kode_warna.forEach((data) => {
           listColorKode(data.warnaId);
         })
@@ -59,6 +62,7 @@ const ActionItem = () => {
 
     setKodeWarna({ warna: arrayColor });
   };
+
   const listColor = (e, id) => {
     let arrayColor = [];
     if (e) {
@@ -67,14 +71,30 @@ const ActionItem = () => {
       }
       arrayColor = form.warna;
       arrayColor.push(id);
+      setForm({ ...form, warna: arrayColor });
     } else {
-      arrayColor = form.warna.filter((data) => data !== id);
+      if (form.warna !== undefined) {
+        arrayColor = form.warna.filter((data) => data !== id);
+        setForm({ ...form, warna: arrayColor });
+      } else {
+        arrayColor = kodewarna.warna.filter((data) => data !== id);
+        setKodeWarna({ warna: arrayColor });
+      }
     }
-    setForm({ ...form, warna: arrayColor });
   };
-  console.log(form.warna);
   const submitHandler = () => {
     // buat redirect
+    console.log(kodewarna.warna);
+    console.log(form.warna);
+    if (form.warna === undefined) {
+      form.warna = [];
+    }
+    let mix = form.warna.concat(kodewarna.warna);
+    let removeDuplicate = mix.filter(function (item, pos) {
+      return mix.indexOf(item) == pos;
+    });
+    form.warna = removeDuplicate;
+    console.log(form);
     id
       ? editItem(id, form, localStorage.access_token, (result) => {
           if (result.data.message === 'success') {
@@ -183,7 +203,6 @@ const ActionItem = () => {
                   const changeCheck = (e) => {
                     warnas.check = !warnas.check;
                     listColor(e, id);
-                    console.log(id);
                   };
                   if (kodewarna.warna !== undefined) {
                     let status = kodewarna.warna.filter((data) => data === id);

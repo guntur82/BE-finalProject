@@ -93,6 +93,20 @@ class ItemController {
           where: { id },
         }
       );
+      let i = 0;
+      console.log(req.body);
+      let itemId = id;
+      let destory = await kodeWarna.destroy({
+        where: { itemId },
+      });
+      while (req.body[`warna.${i}`]) {
+        let warnaId = req.body[`warna.${i}`];
+        let result_warna = await kodeWarna.create({
+          itemId,
+          warnaId,
+        });
+        i++;
+      }
       result[0] === 1
         ? res.status(200).json({
             message: `success`,
