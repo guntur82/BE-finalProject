@@ -13,6 +13,7 @@ import {
   ActionItem,
   Warna,
   ActionWarna,
+  AddItem,
 } from './pages';
 import { Routes, Route } from 'react-router-dom';
 
@@ -42,6 +43,9 @@ function App() {
           <Route path="create" element={<ActionItem />}></Route>
           <Route path="edit">
             <Route path=":id" element={<ActionItem />}></Route>
+          </Route>
+          <Route path="add">
+            <Route path=":id" element={<AddItem />}></Route>
           </Route>
         </Route>
         <Route path="warna">

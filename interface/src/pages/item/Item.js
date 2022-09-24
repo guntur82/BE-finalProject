@@ -119,6 +119,12 @@ const Item = () => {
                           >
                             Edit
                           </Link>
+                          <Link
+                            to={`/item/add/${id}`}
+                            className="btn btn-sm btn-success"
+                          >
+                            Add
+                          </Link>
                           <button
                             onClick={() => deleteHandler(+id)}
                             className="btn btn-sm btn-danger"

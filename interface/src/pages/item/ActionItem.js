@@ -85,6 +85,11 @@ const ActionItem = () => {
   const submitHandler = () => {
     // buat redirect
     console.log(kodewarna.warna);
+    if (kodewarna.warna !== undefined) {
+      kodewarna.warna = kodewarna.warna.filter(function (item, pos) {
+        return kodewarna.warna.indexOf(item) == pos;
+      });
+    }
     console.log(form.warna);
     if (form.warna === undefined) {
       form.warna = [];

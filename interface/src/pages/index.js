@@ -9,6 +9,7 @@ import Item from './item/Item';
 import ActionItem from './item/ActionItem';
 import Warna from './warna/Warna';
 import ActionWarna from './warna/ActionWarna';
+import AddItem from './item/AddItem';
 
 export {
   Login,
@@ -22,4 +23,5 @@ export {
   ActionItem,
   Warna,
   ActionWarna,
+  AddItem,
 };

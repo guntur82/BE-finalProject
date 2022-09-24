@@ -65,7 +65,7 @@ class ItemController {
       const { name, harga, stok, deskripsi, tanggal, brandId } = req.body;
       let userId = req.userData.id;
       let dataExist = await item.findByPk(id);
-      let gambar = req.file ? req.file.filename : '';
+      let gambar = req.file ? req.file.filename : dataExist.gambar;
       if (req.file) {
         if (
           fs.existsSync(`${__dirname}/../public/uploads/${dataExist.gambar}`)
