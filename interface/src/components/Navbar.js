@@ -35,8 +35,9 @@ const Navbar = () => {
           localStorage.clear();
         }
         loginCbHanddler(!loginStatus);
-        Swal.fire('Logout', '', 'success');
-        window.location.reload();
+        Swal.fire('Logout', '', 'success').then(() => {
+          window.location.reload();
+        });
       }
     });
   };
