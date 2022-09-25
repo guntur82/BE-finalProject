@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 const Login = () => {
+  const URL = 'http://localhost:3000/api/user';
   const navigate = useNavigate();
   const [form, setForm] = useState({
     email: '',
@@ -32,7 +33,7 @@ const Login = () => {
       } else {
         let result = await axios({
           method: 'POST',
-          url: 'http://localhost:3000/api/user/login',
+          url: URL + '/login',
           data: form,
         });
         console.log(result);

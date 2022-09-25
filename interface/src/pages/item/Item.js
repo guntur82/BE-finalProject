@@ -67,7 +67,14 @@ const Item = () => {
                       <tr key={id}>
                         <td>{key + 1}</td>
                         <td>{name}</td>
-                        <td>{harga}</td>
+                        <td>
+                          Rp.
+                          {new Intl.NumberFormat('de-DE', {
+                            prefix: 'Rp',
+                            centsLimit: 0,
+                            thousandsSeparator: '.',
+                          }).format(harga)}
+                        </td>
                         <td>{deskripsi}</td>
                         <td>{tanggal}</td>
                         <td>{stok}</td>

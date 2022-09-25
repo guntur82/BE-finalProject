@@ -60,15 +60,25 @@ const ActionWarna = () => {
                 <div className="text-center">
                   <h3>Warna</h3>
                 </div>
-                <div className="mb-3">
+                <div className="input-group mb-3">
                   <input
+                    className="input-group-text form-control-lg"
+                    id="basic-addon1"
                     type="color"
+                    onChange={(e) =>
+                      setForm({ ...form, nama_warna: e.target.value })
+                    }
+                    value={form.nama_warna}
+                  />
+                  <input
+                    type="text"
                     className="form-control"
                     onChange={(e) =>
                       setForm({ ...form, nama_warna: e.target.value })
                     }
                     value={form.nama_warna}
                     placeholder="Name..."
+                    maxLength="7"
                   />
                 </div>
                 <div className="text-center">

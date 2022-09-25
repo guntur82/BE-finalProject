@@ -9,6 +9,7 @@ import { getBrand } from '../../axios/brandAxios';
 import { getDetailListItemWarna, getWarna } from '../../axios/warnaAxios';
 
 const ActionItem = () => {
+  const API_img = 'http://localhost:3000/uploads/';
   const navigate = useNavigate();
   const [form, setForm] = useState({
     name: '',
@@ -44,7 +45,9 @@ const ActionItem = () => {
           tanggal: result.tanggal,
           stok: result.stok,
           brandId: result.brandId,
+          gambar: result.gambar,
         });
+        setImg({ preview: API_img + result.gambar });
       });
     }
   }, []);
