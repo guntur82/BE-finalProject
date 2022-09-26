@@ -36,7 +36,6 @@ const Login = () => {
           url: URL + '/login',
           data: form,
         });
-        console.log(result);
         localStorage.setItem('access_token', result.data.access_token);
         Swal.fire('Login Berhasil', '', 'success');
         navigate('/home');

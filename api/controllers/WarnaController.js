@@ -1,5 +1,4 @@
 const { warna } = require('../models');
-const fs = require('fs');
 class WarnaController {
   static async getData(req, res) {
     try {
