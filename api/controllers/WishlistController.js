@@ -1,8 +1,9 @@
-const { wishList } = require('../models');
+const { wishList, item, user } = require('../models');
 class WishlistController {
   static async getData(req, res) {
     try {
       let result = await wishList.findAll({
+        include: [item, user],
         order: [['id', 'asc']],
       });
       res.status(200).json(result);
@@ -33,9 +34,10 @@ class WishlistController {
   static async delete(req, res) {
     try {
       // ini masih blm pasti yah pake ID
-      const id = req.params.id;
+      const { itemId } = req.body;
+      let userId = req.userData.id;
       let result = await wishList.destroy({
-        where: { id },
+        where: { itemId, userId },
       });
       result === 1
         ? res.status(200).json({
@@ -52,8 +54,13 @@ class WishlistController {
   static async getInformation(req, res) {
     try {
       // blm pasti juga karna pake params id
-      const id = +req.params.id;
-      let result = await wishList.findByPk(id);
+      let userId = req.userData.id;
+      let result = await wishList.findAll({
+        include: [item, user],
+        order: [['id', 'asc']],
+        where: { userId },
+      });
+      console.log(userId);
       res.status(200).json(result);
     } catch (error) {
       res.status(500).json(error);
