@@ -144,8 +144,13 @@ const ActionUser = () => {
                 </div>
                 <div className="mb-3">
                   <input
-                    type="number"
+                    type="text"
                     className="form-control"
+                    onKeyPress={(event) => {
+                      if (!/[0-9]/.test(event.key)) {
+                        event.preventDefault();
+                      }
+                    }}
                     onChange={(e) =>
                       setForm({ ...form, no_hp: e.target.value })
                     }

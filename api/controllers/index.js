@@ -3,6 +3,7 @@ const BrandController = require('./BrandController');
 const ItemController = require('./ItemController');
 const WarnaController = require('./WarnaController');
 const KodeWarnaController = require('./KodeWarnaController');
+const WishlistController = require('./WishlistController');
 
 module.exports = {
   UserController,
@@ -10,4 +11,5 @@ module.exports = {
   ItemController,
   WarnaController,
   KodeWarnaController,
+  WishlistController,
 };

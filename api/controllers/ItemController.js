@@ -1,10 +1,23 @@
-const { item, brand, user, kodeWarna } = require('../models');
+const { item, brand, user, kodeWarna, historyItem } = require('../models');
 const fs = require('fs');
 class ItemController {
   static async getData(req, res) {
     try {
       let result = await item.findAll({
         include: [brand, user],
+        order: [['id', 'asc']],
+      });
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
+
+  static async getHistory(req, res) {
+    try {
+      // res.status(200).json('sample');
+      let result = await historyItem.findAll({
+        include: [item, user],
         order: [['id', 'asc']],
       });
       res.status(200).json(result);
@@ -152,6 +165,38 @@ class ItemController {
       const id = +req.params.id;
       let result = await item.findByPk(id);
       res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
+
+  static async addItem(req, res) {
+    try {
+      const { id, stok, tanggal } = req.body;
+      let userId = req.userData.id;
+      let dataExist = await item.findByPk(id);
+      let result = await item.update(
+        {
+          stok: +stok + dataExist.stok,
+        },
+        {
+          where: { id },
+        }
+      );
+      let result_history = await historyItem.create({
+        jumlah: stok,
+        tanggal,
+        userId,
+        itemId: id,
+      });
+      result[0] === 1
+        ? res.status(200).json({
+            message: `success`,
+          })
+        : // 404 not found
+          res.status(404).json({
+            message: `not found`,
+          });
     } catch (error) {
       res.status(500).json(error);
     }

@@ -177,8 +177,13 @@ const ActionItem = () => {
                 </div>
                 <div className="mb-3">
                   <input
-                    type="number"
+                    type="text"
                     className="form-control"
+                    onKeyPress={(event) => {
+                      if (!/[0-9]/.test(event.key)) {
+                        event.preventDefault();
+                      }
+                    }}
                     onChange={(e) => setForm({ ...form, stok: e.target.value })}
                     value={form.stok}
                     placeholder="Stok..."

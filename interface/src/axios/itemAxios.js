@@ -43,7 +43,6 @@ const editItem = async (id, data, access_token, cb) => {
         auth: access_token,
       },
     });
-    console.log(result);
     cb(result);
   } catch (error) {
     console.log(error);
@@ -88,4 +87,39 @@ const informationItem = async (id, cb) => {
   }
 };
 
-export { getItem, addItem, editItem, deleteItem, informationItem };
+const addItemStock = async (data, access_token, cb) => {
+  try {
+    let result = await axios({
+      method: 'POST',
+      url: URL + '/add',
+      data: data,
+      headers: {
+        auth: access_token,
+      },
+    });
+    cb(result.data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+const historyItem = async (cb) => {
+  try {
+    let result = await axios({
+      method: 'GET',
+      url: URL + '/history',
+    });
+    cb(result.data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export {
+  getItem,
+  addItem,
+  editItem,
+  deleteItem,
+  informationItem,
+  addItemStock,
+  historyItem,
+};
