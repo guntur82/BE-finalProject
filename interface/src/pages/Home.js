@@ -24,9 +24,11 @@ const Home = () => {
   };
   const [status, setStatus] = useState({
     status_barang: '',
+    status_pengiriman: '',
   });
   const approveHandler = (id) => {
     status.status_barang = 1;
+    status.status_pengiriman = 1;
     editCart(id, status, (result) => {
       if (result.data.message === 'success') {
         Swal.fire('Success', 'Pembaharuan berhasil', 'success');
@@ -56,37 +58,51 @@ const Home = () => {
               <tbody>
                 {cart.length > 0 ? (
                   cart.map((carts, key) => {
-                    const { id, jumlah, tanggal, status_barang } = carts;
-                    return (
-                      <tr key={id}>
-                        <td>{key + 1}</td>
-                        <td>{carts.user.name}</td>
-                        <td>{carts.item.name}</td>
-                        <td>{tanggal}</td>
-                        <td>{jumlah}</td>
-                        <td>
-                          {status_barang === 0 ? (
-                            <AiOutlineQuestion />
-                          ) : (
-                            <FiCheck />
-                          )}
-                        </td>
-                        <td>
-                          <button
-                            onClick={() => approveHandler(+id)}
-                            className="btn btn-sm btn-primary"
-                          >
-                            Terima
-                          </button>
-                          <button
-                            onClick={() => deleteHandler(+id)}
-                            className="btn btn-sm btn-danger"
-                          >
-                            Tolak
-                          </button>
-                        </td>
-                      </tr>
-                    );
+                    const {
+                      id,
+                      jumlah,
+                      tanggal,
+                      status_barang,
+                      status_pengiriman,
+                    } = carts;
+                    if (status_barang === 1) {
+                      return (
+                        <tr key={id}>
+                          <td>{key + 1}</td>
+                          <td>{carts.user.name}</td>
+                          <td>{carts.item.name}</td>
+                          <td>{tanggal}</td>
+                          <td>{jumlah}</td>
+                          <td>
+                            {status_pengiriman === 0 ? (
+                              <AiOutlineQuestion />
+                            ) : (
+                              <FiCheck />
+                            )}
+                          </td>
+                          <td>
+                            {status_pengiriman === 0 ? (
+                              <>
+                                <button
+                                  onClick={() => approveHandler(+id)}
+                                  className="btn btn-sm btn-primary"
+                                >
+                                  Terima
+                                </button>
+                                <button
+                                  onClick={() => deleteHandler(+id)}
+                                  className="btn btn-sm btn-danger"
+                                >
+                                  Tolak
+                                </button>
+                              </>
+                            ) : (
+                              <>-</>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    }
                   })
                 ) : (
                   <LoadingBar />

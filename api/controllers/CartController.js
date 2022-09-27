@@ -19,10 +19,16 @@ class CartController {
        *
        * status_pengiriman = 0 => masih list di admin
        * status_pengiriman = 1 => sudah di terima admin dan otw ketempat user
+       *
+       * sb = 0, sp = 0 => cart (user)
+       * sb = 1, sp = 0 => sudah melakukan pembayaran (user)
+       * sb = 1, sp = 1 => sudah diterima admin dan sedang dikirim (admin)
+       * sb = 0, sp = 1 => barang sudah sampai (user)
+       *
        */
-      const { tanggal, jumlah, itemId } = req.body;
+      // status barang bisa 0/1 gimana user,mau beli lngsung atau cart dlu
+      const { tanggal, jumlah, itemId, status_barang } = req.body;
       let ratting = 0;
-      let status_barang = 0;
       let status_pengiriman = 0;
       let userId = req.userData.id;
       const dataExist = await cart.findOne({
@@ -66,14 +72,12 @@ class CartController {
       // simulasi pake 2 data
       let i = 0;
       while (req.body[`itemId.${i}`]) {
-        const { ratting, status_barang, status_pesanan, tanggal } = req.body;
+        const { ratting, status_barang, tanggal } = req.body;
         let itemId = req.body[`itemId.${i}`];
         const dataExist = await cart.findAll({
-          where: { userId, itemId, status_barang: 0 },
+          where: { userId, itemId, status_barang: 0, status_pengiriman: 0 },
         });
-        const dataProses = await cart.findAll({
-          where: { userId, itemId, status_barang: 1 },
-        });
+        // kalo mau beli barang yang di cart dengan status sb = 0, sp = 0
         if (dataExist) {
           let result = await cart.update(
             {
@@ -92,28 +96,11 @@ class CartController {
               res.status(404).json({
                 message: `not found`,
               });
-        } else if (dataProses) {
-          let result = await cart.update(
-            {
-              tanggal,
-              status_pesanan,
-            },
-            {
-              where: { userId, itemId },
-            }
-          );
-          result[0] === 1
-            ? res.status(200).json({
-                message: `success pesanan`,
-              })
-            : // 404 not found
-              res.status(404).json({
-                message: `not found`,
-              });
         } else {
-          // kalo status pengiriman = 1,bru bisa kasih ratting
+          // kasih rating kalo barang sudah sampai dengan status sb = 0, sp = 1
           let result = await cart.update(
             {
+              status_barang,
               ratting,
             },
             {
@@ -138,10 +125,11 @@ class CartController {
   static async updateAdmin(req, res) {
     try {
       const id = +req.params.id;
-      const { status_barang } = req.body;
+      const { status_barang, status_pengiriman } = req.body;
       let result = await cart.update(
         {
           status_barang,
+          status_pengiriman,
         },
         {
           where: { id },
