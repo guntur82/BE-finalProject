@@ -230,7 +230,9 @@ const ActionItem = () => {
                       <input
                         style={{
                           backgroundColor:
-                            nama_warna !== '#ffffff' ? nama_warna : '',
+                            nama_warna !== '#ffffff' && nama_warna !== 'white'
+                              ? nama_warna
+                              : '',
                         }}
                         onChange={(e) => changeCheck(e.target.checked)}
                         type="checkbox"

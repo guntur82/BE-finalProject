@@ -49,6 +49,9 @@ class UserController {
           let access_token = tokenGenerator(emailFound);
           res.status(200).json({
             access_token,
+            name: emailFound.name,
+            email: emailFound.email,
+            gambar: emailFound.gambar,
           });
           // verifytoken belum dipake
           let verifyToken = tokenVerifier(access_token);
@@ -86,7 +89,7 @@ class UserController {
           alamat,
           gambar,
         });
-        res.status(201).json(result);
+        res.json(result);
       }
     } catch (error) {
       res.status(500).json(error);
