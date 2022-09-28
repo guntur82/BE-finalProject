@@ -38,10 +38,11 @@ const ActionItem = () => {
         })
       );
       informationItem(+id, (result) => {
+        console.log(result);
         setForm({
           name: result.name,
           harga: result.harga,
-          deksripsi: result.deksripsi,
+          deskripsi: result.deskripsi,
           tanggal: result.tanggal,
           stok: result.stok,
           brandId: result.brandId,

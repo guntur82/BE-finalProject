@@ -52,7 +52,7 @@ const AddItem = () => {
                   <h3>Tambah Stok</h3>
                 </div>
                 <div className="input-group mb-3">
-                  <span class="input-group-text" id="basic-addon1">
+                  <span className="input-group-text" id="basic-addon1">
                     Nama
                   </span>
                   <input
@@ -65,7 +65,7 @@ const AddItem = () => {
                   />
                 </div>
                 <div className="input-group mb-3">
-                  <span class="input-group-text" id="basic-addon1">
+                  <span className="input-group-text" id="basic-addon1">
                     Stok
                   </span>
                   <input
