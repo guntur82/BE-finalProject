@@ -16,12 +16,13 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import Link from '@mui/material/Link';
+import { detailUser } from '../axios/userAxios';
 
-const pages = ['brand', 'item', 'warna'];
+const pages = ['brand', 'item', 'warna', 'user'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const Navbar = () => {
-  // const API_img = 'http://localhost:3000/uploads/';
+  const API_img = 'http://localhost:3000/uploads/';
   const [loginStatus, setLoginStatus] = useState(false);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -44,9 +45,15 @@ const Navbar = () => {
     setLoginStatus(result);
   };
   const navigate = useNavigate();
+  const [form, setForm] = useState({
+    token: '',
+  });
+  const [data, setData] = useState([]);
   useEffect(() => {
     if (localStorage.getItem('access_token')) {
       setLoginStatus(true);
+      setForm({ token: localStorage.getItem('access_token') });
+      detailUser(form, (result) => setData(result));
     } else {
       setLoginStatus(false);
       navigate('/');
@@ -170,7 +177,8 @@ const Navbar = () => {
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                  {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" /> */}
+                  <Avatar alt="Remy Sharp" src={API_img + data.gambar} />
                 </IconButton>
               </Tooltip>
               <Menu
