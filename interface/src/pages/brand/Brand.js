@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import Navbar from "../../components/Navbar";
-import LoadingBar from "../../helpers/LoadingBar";
-import { Link } from "react-router-dom";
-import { FiPlusSquare } from "react-icons/fi";
-import { deleteBrand, getBrand } from "../../axios/brandAxios";
+import React, { useState, useEffect } from 'react';
+import Navbar from '../../components/Navbar';
+import LoadingBar from '../../helpers/LoadingBar';
+import { Link } from 'react-router-dom';
+import { FiPlusSquare } from 'react-icons/fi';
+import { deleteBrand, getBrand } from '../../axios/brandAxios';
 
 const Brand = () => {
-  const API_img = "http://localhost:3000/uploads/";
+  const API_img = 'http://localhost:3000/uploads/';
   const [brand, setBrand] = useState([]);
   useEffect(() => {
     getBrand((result) => setBrand(result));
@@ -17,12 +17,12 @@ const Brand = () => {
   return (
     <>
       <Navbar></Navbar>
-      <h3 class="mb-3 text-center">Brand</h3>
+      <h3 className="mb-3 text-center">Brand</h3>
       <div className="row my-3 text-center">
         <div className="col-9 mx-auto">
           <div className="w-100">
-            <div class="row justify-content-end">
-              <div class="col-2">
+            <div className="row justify-content-end">
+              <div className="col-2">
                 <Link
                   to="/brand/create"
                   className="btn btn-sm btn-primary my-2"
@@ -56,27 +56,27 @@ const Brand = () => {
                         <td>
                           <img
                             alt="gambar"
-                            src={logo ? API_img + logo : ""}
+                            src={logo ? API_img + logo : ''}
                             className="img-thumbnail"
-                            width={logo ? "100" : 0}
-                            height={logo ? "100" : 0}
+                            width={logo ? '100' : 0}
+                            height={logo ? '100' : 0}
                           />
                         </td>
                         <td>
-                          <div style={{ paddingRight: "10px" }}>
+                          <div style={{ paddingRight: '10px' }}>
                             <Link
                               to={`/brand/edit/${id}`}
                               className="btn btn-sm btn-primary"
-                              style={{ width: "100px" }}
+                              style={{ width: '100px' }}
                             >
                               Edit
                             </Link>
                           </div>
-                          <div style={{ paddingRight: "10px" }}>
+                          <div style={{ paddingRight: '10px' }}>
                             <button
                               onClick={() => deleteHandler(+id)}
                               className="btn btn-sm btn-danger"
-                              style={{ width: "100px" }}
+                              style={{ width: '100px' }}
                             >
                               Delete
                             </button>

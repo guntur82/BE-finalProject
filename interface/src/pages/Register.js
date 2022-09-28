@@ -116,11 +116,16 @@ const Register = () => {
                 </div>
                 <div className="mb-3">
                   <input
-                    type="number"
+                    type="text"
                     className="form-control"
                     onChange={(e) =>
                       setForm({ ...form, no_hp: e.target.value })
                     }
+                    onKeyPress={(event) => {
+                      if (!/[0-9]/.test(event.key)) {
+                        event.preventDefault();
+                      }
+                    }}
                     placeholder="Phone..."
                   />
                 </div>
