@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import Navbar from '../../components/Navbar';
-import LoadingBar from '../../helpers/LoadingBar';
-import { Link } from 'react-router-dom';
-import { FiPlusSquare } from 'react-icons/fi';
-import { deleteWarna, getWarna } from '../../axios/warnaAxios';
+import React, { useState, useEffect } from "react";
+import Navbar from "../../components/Navbar";
+import LoadingBar from "../../helpers/LoadingBar";
+import { Link } from "react-router-dom";
+import { FiPlusSquare } from "react-icons/fi";
+import { deleteWarna, getWarna } from "../../axios/warnaAxios";
 const Warna = () => {
   const [warna, setWarna] = useState([]);
   useEffect(() => {
@@ -15,15 +15,23 @@ const Warna = () => {
   return (
     <>
       <Navbar></Navbar>
+      <h3 class="mb-3 text-center">Warna</h3>
       <div className="row my-3 text-center">
         <div className="col-9 mx-auto">
           <div className="w-100">
-            <Link to="/warna/create" className="btn btn-sm btn-primary my-2">
-              <span className="me-2">
-                <FiPlusSquare></FiPlusSquare>
-              </span>
-              Tambah warna
-            </Link>
+            <div class="row justify-content-end">
+              <div class="col-2">
+                <Link
+                  to="/warna/create"
+                  className="btn btn-sm btn-primary my-2"
+                >
+                  <span className="me-2">
+                    <FiPlusSquare></FiPlusSquare>
+                  </span>
+                  Tambah Warna
+                </Link>
+              </div>
+            </div>
           </div>
           <div className="w-100">
             <table className="table table-border">
@@ -56,7 +64,7 @@ const Warna = () => {
                                 className="box"
                                 style={{
                                   backgroundColor: nama_warna,
-                                  borderColor: 'black',
+                                  borderColor: "black",
                                 }}
                               >
                                 <p>{nama_warna}</p>
@@ -65,18 +73,24 @@ const Warna = () => {
                           </div>
                         </td>
                         <td>
-                          <Link
-                            to={`/warna/edit/${id}`}
-                            className="btn btn-sm btn-info"
-                          >
-                            Edit
-                          </Link>
-                          <button
-                            onClick={() => deleteHandler(+id)}
-                            className="btn btn-sm btn-danger"
-                          >
-                            Delete
-                          </button>
+                          <div style={{ paddingRight: "10px" }}>
+                            <Link
+                              to={`/warna/edit/${id}`}
+                              className="btn btn-sm btn-primary"
+                              style={{ width: "100px" }}
+                            >
+                              Edit
+                            </Link>
+                          </div>
+                          <div style={{ paddingRight: "10px" }}>
+                            <button
+                              onClick={() => deleteHandler(+id)}
+                              className="btn btn-sm btn-danger"
+                              style={{ width: "100px" }}
+                            >
+                              Delete
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     );
