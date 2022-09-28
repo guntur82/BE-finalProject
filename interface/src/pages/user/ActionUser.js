@@ -24,11 +24,11 @@ const ActionUser = () => {
     if (id) {
       dataUser(+id, (result) => {
         setForm({
-          name: result.name,
-          email: result.email,
-          no_hp: result.no_hp,
-          level: result.level,
-          alamat: result.alamat,
+          name: result.name ?? '',
+          email: result.email ?? '',
+          no_hp: result.no_hp ?? '',
+          level: result.level ?? '',
+          alamat: result.alamat ?? '',
         });
       });
     }
