@@ -13,7 +13,7 @@ class UserController {
     }
   }
   // login admin
-  static async login(req, res) {
+  static async loginAdmin(req, res) {
     try {
       const { email, password } = req.body;
       let emailFound = await user.findOne({
@@ -38,8 +38,34 @@ class UserController {
       res.status(500).json(error);
     }
   }
+  static async login(req, res) {
+    try {
+      const { email, password } = req.body;
+      let emailFound = await user.findOne({
+        where: { email },
+      });
+      if (emailFound) {
+        if (decryptPass(password, emailFound.password)) {
+          let access_token = tokenGenerator(emailFound);
+          res.status(200).json({
+            access_token,
+          });
+          // verifytoken belum dipake
+          let verifyToken = tokenVerifier(access_token);
+          console.log(verifyToken);
+        } else {
+          res.status(403).json({ message: `Invalid password` });
+        }
+      } else {
+        res.status(404).json({ message: `User ${email} not found` });
+      }
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
   static async register(req, res) {
     try {
+      // register pake fungsi check email buat di flutternya(bebas mau di flutter/express)
       const { name, email, password, no_hp, level, alamat } = req.body;
       const emailExist = await user.findOne({ where: { email } });
       let gambar = req.file ? req.file.filename : '';
@@ -49,7 +75,7 @@ class UserController {
             console.log('file has been deleted');
           });
         }
-        res.status(201).json('email');
+        res.status(400).json({ msg: 'Email sudah digunakan!' });
       } else {
         let result = await user.create({
           name,

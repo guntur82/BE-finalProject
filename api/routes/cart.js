@@ -8,6 +8,6 @@ cartRoutes.post('/', auth, CartController.create);
 cartRoutes.put('/', auth, CartController.update); //post diganti put
 cartRoutes.put('/update/:id', CartController.updateAdmin); //post diganti put
 cartRoutes.delete('/', auth, CartController.delete); //get di ganti delete
-cartRoutes.delete('/delete/:id', CartController.delete); //get di ganti delete
+cartRoutes.delete('/delete/:id', CartController.deleteAdmin); //get di ganti delete
 
 module.exports = cartRoutes;

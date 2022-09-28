@@ -4,6 +4,7 @@ const multer = require('../helpers/multer');
 
 userRoutes.get('/', UserController.getAllUsers);
 userRoutes.post('/', multer.single('gambar'), UserController.register);
+userRoutes.post('/loginadmin', UserController.loginAdmin);
 userRoutes.post('/login', UserController.login);
 userRoutes.put('/:id', multer.single('gambar'), UserController.updateUser);
 userRoutes.delete('/:id', UserController.deleteUser);

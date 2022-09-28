@@ -33,7 +33,7 @@ const Login = () => {
       } else {
         let result = await axios({
           method: 'POST',
-          url: URL + '/login',
+          url: URL + '/loginadmin',
           data: form,
         });
         localStorage.setItem('access_token', result.data.access_token);
