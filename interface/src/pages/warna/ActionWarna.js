@@ -8,7 +8,7 @@ import { addWarna, editWarna, informationWarna } from '../../axios/warnaAxios';
 const ActionWarna = () => {
   const navigation = useNavigate();
   const [form, setForm] = useState({
-    nama_warna: '#000000',
+    nama_warna: '',
   });
   const params = useParams();
   const { id } = params;
@@ -62,24 +62,17 @@ const ActionWarna = () => {
                 </div>
                 <div className="input-group mb-3">
                   <input
-                    className="input-group-text form-control-lg"
-                    id="basic-addon1"
-                    type="color"
-                    onChange={(e) =>
-                      setForm({ ...form, nama_warna: e.target.value })
-                    }
-                    value={form.nama_warna}
-                  />
-                  <input
                     type="text"
                     className="form-control"
                     onChange={(e) =>
                       setForm({ ...form, nama_warna: e.target.value })
                     }
+                    placeholder="exp : red"
                     value={form.nama_warna}
-                    placeholder="Name..."
-                    maxLength="7"
                   />
+                </div>
+                <div className="input-group mb-3">
+                  <p>*Input color / name color</p>
                 </div>
                 <div className="text-center">
                   <button

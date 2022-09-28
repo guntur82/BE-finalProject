@@ -47,7 +47,7 @@ const Register = () => {
             Swal.fire({
               icon: 'error',
               title: 'Oops...',
-              text: result.data,
+              text: result.data.msg,
             });
           }
         });

@@ -57,10 +57,10 @@ class UserController {
           let verifyToken = tokenVerifier(access_token);
           console.log(verifyToken);
         } else {
-          res.status(403).json({ message: `Invalid password` });
+          res.status(403).json({ msg: `Invalid password` });
         }
       } else {
-        res.status(404).json({ message: `User ${email} not found` });
+        res.status(404).json({ msg: `User ${email} not found` });
       }
     } catch (error) {
       res.status(500).json(error);
@@ -78,7 +78,7 @@ class UserController {
             console.log('file has been deleted');
           });
         }
-        res.status(400).json({ msg: 'Email sudah digunakan!' });
+        res.json({ msg: 'Email sudah digunakan!' });
       } else {
         let result = await user.create({
           name,
