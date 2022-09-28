@@ -229,17 +229,26 @@ const ActionItem = () => {
                   return (
                     <div className="mb-3" key={id}>
                       <input
-                        style={{
-                          backgroundColor:
-                            nama_warna !== '#ffffff' && nama_warna !== 'white'
-                              ? nama_warna
-                              : '',
-                        }}
                         onChange={(e) => changeCheck(e.target.checked)}
+                        style={{
+                          backgroundColor: nama_warna,
+                          borderColor: 'black',
+                        }}
                         type="checkbox"
                         defaultChecked={warnas.check}
                         className="form-check-input"
                       />
+                      {/* <div className="pallete">
+                        <div className="kotak">
+                          <div
+                            className="box"
+                            style={{
+                              backgroundColor: nama_warna,
+                              borderColor: 'black',
+                            }}
+                          ></div>
+                        </div>
+                      </div> */}
 
                       <label className="form-check-label"> {nama_warna}</label>
                     </div>

@@ -71,6 +71,7 @@ class CartController {
       // itemId hrusnya ntar array inputnya
       // simulasi pake 2 data
       let i = 0;
+      let result = '';
       while (req.body[`itemId.${i}`]) {
         const { ratting, status_barang, tanggal } = req.body;
         let itemId = req.body[`itemId.${i}`];
@@ -79,7 +80,7 @@ class CartController {
         });
         // kalo mau beli barang yang di cart dengan status sb = 0, sp = 0
         if (dataExist) {
-          let result = await cart.update(
+          result = await cart.update(
             {
               tanggal,
               status_barang,
@@ -88,17 +89,17 @@ class CartController {
               where: { userId, itemId },
             }
           );
-          result[0] === 1
-            ? res.status(200).json({
-                message: `success barang`,
-              })
-            : // 404 not found
-              res.status(404).json({
-                message: `not found`,
-              });
+          // result[0] === 1
+          //   ? res.status(200).json({
+          //       message: `success barang`,
+          //     })
+          //   : // 404 not found
+          //     res.status(404).json({
+          //       message: `not found`,
+          //     });
         } else {
           // kasih rating kalo barang sudah sampai dengan status sb = 0, sp = 1
-          let result = await cart.update(
+          result = await cart.update(
             {
               status_barang,
               ratting,
@@ -107,16 +108,25 @@ class CartController {
               where: { userId, itemId },
             }
           );
-          result[0] === 1
-            ? res.status(200).json({
-                message: `success rating`,
-              })
-            : // 404 not found
-              res.status(404).json({
-                message: `not found`,
-              });
+          // result[0] === 1
+          //   ? res.status(200).json({
+          //       message: `success rating`,
+          //     })
+          //   : // 404 not found
+          //     res.status(404).json({
+          //       message: `not found`,
+          //     });
         }
+        i++;
       }
+      result[0] === 1
+        ? res.status(200).json({
+            message: `success`,
+          })
+        : // 404 not found
+          res.status(404).json({
+            message: `not found`,
+          });
     } catch (error) {
       res.status(500).json(error);
     }

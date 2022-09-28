@@ -120,34 +120,18 @@ const Item = () => {
                         <td>{userId ? items.user.name : ' - '}</td>
                         <td>{brandId ? items.brand.nama : ' - '}</td>
                         <td>
-                          {listWarna.map((data, i) => {
-                            const { itemId } = data;
-                            if (id === itemId) {
-                              return (
-                                <div className="pallete" key={i}>
-                                  <div className="kotak">
-                                    <div
-                                      className="box"
-                                      style={{
-                                        backgroundColor: data.warna.nama_warna,
-                                        borderColor: 'black',
-                                      }}
-                                    >
-                                      {/* <input
-                                      style={{
-                                        backgroundColor: data.warna.nama_warna,
-                                        borderColor: 'black',
-                                      }}
-                                      type="checkbox"
-                                      className="form-check-input"
-                                    /> */}
-                                      {/* <p>{data.warna.nama_warna}</p> */}
-                                    </div>
-                                  </div>
-                                </div>
-                              );
-                            }
-                          })}
+                          <select>
+                            {listWarna.map((data, i) => {
+                              const { itemId } = data;
+                              if (id === itemId) {
+                                return (
+                                  <option>
+                                    <p>{data.warna.nama_warna}</p>
+                                  </option>
+                                );
+                              }
+                            })}
+                          </select>
                         </td>
                         <td>
                           <img

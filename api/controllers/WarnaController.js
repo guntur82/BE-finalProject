@@ -1,4 +1,4 @@
-const { warna } = require('../models');
+const { warna, kodeWarna } = require('../models');
 class WarnaController {
   static async getData(req, res) {
     try {
@@ -57,6 +57,9 @@ class WarnaController {
       const id = req.params.id;
       let result = await warna.destroy({
         where: { id },
+      });
+      let result_kode = await kodeWarna.destroy({
+        where: { warnaId: id },
       });
       result === 1
         ? res.status(200).json({
