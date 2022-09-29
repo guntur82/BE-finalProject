@@ -60,6 +60,10 @@ const Navbar = () => {
     }
   }, [loginStatus]);
   // const { loginStatus, loginCbHanddler } = props;
+  const navigation = (result) => {
+    let name = result.toLowerCase();
+    navigate('/' + name);
+  };
   const logoutHandler = () => {
     Swal.fire({
       title: 'Logout',
@@ -210,7 +214,12 @@ const Navbar = () => {
                         {setting}
                       </Typography>
                     ) : (
-                      <Typography textAlign="center">{setting}</Typography>
+                      <Typography
+                        textAlign="center"
+                        onClick={() => navigation(setting)}
+                      >
+                        {setting}
+                      </Typography>
                     )}
                   </MenuItem>
                 ))}

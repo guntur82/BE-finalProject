@@ -10,6 +10,7 @@ import ActionItem from './item/ActionItem';
 import Warna from './warna/Warna';
 import ActionWarna from './warna/ActionWarna';
 import AddItem from './item/AddItem';
+import Profile from './profile/Profile';
 
 export {
   Login,
@@ -24,4 +25,5 @@ export {
   Warna,
   ActionWarna,
   AddItem,
+  Profile,
 };

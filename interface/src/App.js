@@ -14,7 +14,7 @@ import {
   Warna,
   ActionWarna,
   AddItem,
-  Actionhome,
+  Profile,
 } from './pages';
 import { Routes, Route } from 'react-router-dom';
 
@@ -24,6 +24,7 @@ function App() {
       <Routes>
         <Route path="" element={<Login />}></Route>
         <Route path="register" element={<Register />}></Route>
+        <Route path="profile" element={<Profile />}></Route>
         <Route path="home">
           <Route path="" element={<Home />}></Route>
         </Route>
