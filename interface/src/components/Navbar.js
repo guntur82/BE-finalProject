@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-// import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
@@ -15,7 +15,7 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-import Link from '@mui/material/Link';
+// import Link from '@mui/material/Link';
 import { detailUser } from '../axios/userAxios';
 
 const pages = ['brand', 'item', 'warna', 'user'];
@@ -167,7 +167,7 @@ const Navbar = () => {
                   key={page}
                   onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: 'white', display: 'block' }}
-                  href={page}
+                  href={'/' + page}
                 >
                   {page}
                 </Button>
@@ -178,7 +178,10 @@ const Navbar = () => {
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" /> */}
-                  <Avatar alt="Remy Sharp" src={API_img + data.gambar} />
+                  <Avatar
+                    alt="Remy Sharp"
+                    src={data.gambar ? API_img + data.gambar : ''}
+                  />
                 </IconButton>
               </Tooltip>
               <Menu
