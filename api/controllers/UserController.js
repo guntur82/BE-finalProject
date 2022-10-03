@@ -49,9 +49,8 @@ class UserController {
           let access_token = tokenGenerator(emailFound);
           res.status(200).json({
             access_token,
-            name: emailFound.name,
-            email: emailFound.email,
-            gambar: emailFound.gambar,
+            ...emailFound.dataValues,
+            id: String(emailFound.id),
           });
           // verifytoken belum dipake
           let verifyToken = tokenVerifier(access_token);
@@ -176,6 +175,17 @@ class UserController {
       res.status(500).json(error);
     }
   }
+
+  static async detailUser(req, res) {
+    try {
+      const id = +req.params.id;
+      let result = await user.findByPk(id);
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
+
   static async getUser(req, res) {
     try {
       // const id = +req.params.id;
@@ -187,15 +197,34 @@ class UserController {
     }
   }
 
-  static async detailUser(req, res) {
+  // flutter
+  static async tokenIsValid(req, res) {
     try {
-      const id = +req.params.id;
-      let result = await user.findByPk(id);
-      res.status(200).json(result);
+      const token = req.header('auth'); // "req.header('auth')"" atau bisa "req.header.auth"
+      if (!token) return res.json(false);
+      let verifyToken = tokenVerifier(token);
+      if (!verifyToken) return res.json(false);
+      // verifyToken = {id,name,email,gambar,no_hp,alamat}
+      const { id } = verifyToken;
+      const user = await user.findByPk(id);
+      if (!user) return res.json(false);
+      res.json(true);
     } catch (error) {
       res.status(500).json(error);
     }
   }
+
+  static async user(req, res) {
+    try {
+      const id = req.userData.id;
+      const result = await user.findByPk(id);
+      // res.json({ ...result.dataValues, token: req.authToken });
+      res.json({ ...result, token: req.authToken });
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
+  // end flutter
 }
 
 module.exports = UserController;

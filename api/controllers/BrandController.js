@@ -1,4 +1,4 @@
-const { brand } = require('../models');
+const { brand, item } = require('../models');
 const fs = require('fs');
 class BrandController {
   static async getData(req, res) {
@@ -81,6 +81,9 @@ class BrandController {
       }
       let result = await brand.destroy({
         where: { id },
+      });
+      let result_item = await item.destroy({
+        where: { brandId: id },
       });
       result === 1
         ? res.status(200).json({

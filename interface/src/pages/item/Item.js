@@ -14,6 +14,7 @@ const Item = () => {
   const [sorting, setSorting] = useState({
     data: '',
   });
+
   useEffect(() => {
     getListItemWarna((result) => setListWarna(result));
     historyItem((result) => setHistory(result));

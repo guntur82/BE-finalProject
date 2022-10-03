@@ -1,4 +1,5 @@
 const { cart, item, user } = require('../models');
+
 class CartController {
   static async getData(req, res) {
     try {
@@ -11,6 +12,7 @@ class CartController {
       res.status(500).json(error);
     }
   }
+
   static async create(req, res) {
     try {
       /**
@@ -23,7 +25,7 @@ class CartController {
        * sb = 0, sp = 0 => cart (user)
        * sb = 1, sp = 0 => sudah melakukan pembayaran (user)
        * sb = 1, sp = 1 => sudah diterima admin dan sedang dikirim (admin)
-       * sb = 0, sp = 1 => barang sudah sampai (user)
+       * sb = 0, sp = 1 => barang sudah sampai (user) + rating
        *
        */
       // status barang bisa 0/1 gimana user,mau beli lngsung atau cart dlu
@@ -72,6 +74,7 @@ class CartController {
       // simulasi pake 2 data
       let i = 0;
       let result = '';
+
       while (req.body[`itemId.${i}`]) {
         const { ratting, status_barang, tanggal } = req.body;
         let itemId = req.body[`itemId.${i}`];
