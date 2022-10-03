@@ -12,7 +12,21 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import { FiX } from "react-icons/fi";
+import ListItemText from "@mui/material/ListItemText";
 import Select from "@mui/material/Select";
+import Checkbox from "@mui/material/Checkbox";
+import OutlinedInput from "@mui/material/OutlinedInput";
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
 
 const ActionItem = () => {
   const API_img = "http://localhost:3000/uploads/";
@@ -129,6 +143,15 @@ const ActionItem = () => {
             console.log(result);
           }
         });
+  };
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setWarna(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
   };
   return (
     <>
@@ -295,6 +318,24 @@ const ActionItem = () => {
                   </select> */}
                 </div>
                 <label className="mb-3">Warna yang dimiliki :</label>
+                <Select
+                  labelId="demo-multiple-checkbox-label"
+                  id="demo-multiple-checkbox"
+                  multiple
+                  onChange={handleChange}
+                  input={<OutlinedInput label="Tag" />}
+                  renderValue={(selected) => selected.join(", ")}
+                  MenuProps={MenuProps}
+                >
+                  {warna.map((warnas, i) => {
+                    const { id, nama_warna } = warnas;
+                    <MenuItem key={id} value={nama_warna}>
+                      <Checkbox checked={warna.indexOf(warnas) > -1} />
+                      <ListItemText primary={nama_warna} />
+                    </MenuItem>;
+                  })}
+                </Select>
+
                 {warna.map((warnas, i) => {
                   warnas.check = false;
                   const { id, nama_warna } = warnas;

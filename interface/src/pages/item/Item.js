@@ -13,6 +13,9 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
+import Chip from "@mui/material/Chip";
+import Stack from "@mui/material/Stack";
+import Grid from "@mui/material/Grid";
 
 const Item = () => {
   const API_img = "http://localhost:3000/uploads/";
@@ -35,6 +38,7 @@ const Item = () => {
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: "#bfd1ec",
       color: theme.palette.common.black,
+      fontSize: 20,
       fontStyle: "bold",
     },
     [`&.${tableCellClasses.body}`]: {
@@ -174,18 +178,41 @@ const Item = () => {
                               );
                             }
                           })} */}
-                            <select>
+                            {/* <Stack direction="row" spacing={1} maxRow="3"> */}
+                            <Grid
+                              sx={{ flexGrow: 2 }}
+                              container
+                              spacing={1}
+                              px={2}
+                            >
                               {listWarna.map((data, i) => {
                                 const { itemId } = data;
                                 if (id === itemId) {
                                   return (
-                                    <option>
-                                      <p>{data.warna.nama_warna}</p>
-                                    </option>
+                                    <Chip
+                                      label={data.warna.nama_warna}
+                                      variant="outlined"
+                                      style={{
+                                        // backgroundColor: data.warna.nama_warna,
+                                        borderColor: "black",
+                                      }}
+                                    ></Chip>
+                                    // <option>
+                                    //   <p>{data.warna.nama_warna}</p>
+                                    // </option>
                                   );
                                 }
                               })}
-                            </select>
+                            </Grid>
+                            {/* </Stack> */}
+                            {/* <select>
+                              {listWarna.map((data, i) => {
+                                const { itemId } = data;
+                                // <option>
+                                //   <p>{data.warna.nama_warna}</p>
+                                // </option>
+                              })}
+                            </select> */}
                           </StyledTableCell>
                           <StyledTableCell>
                             <img

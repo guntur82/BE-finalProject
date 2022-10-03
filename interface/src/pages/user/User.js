@@ -24,6 +24,7 @@ const User = () => {
   };
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
+      fontSize: 20,
       backgroundColor: "#bfd1ec",
       color: theme.palette.common.black,
       fontStyle: "bold",
