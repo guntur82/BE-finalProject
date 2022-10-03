@@ -1,18 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import Navbar from '../../components/Navbar';
-import '../../App.css';
-import moment from 'moment';
-import { useNavigate, useParams } from 'react-router-dom';
-import Swal from 'sweetalert2';
-import { addItemStock, informationItem } from '../../axios/itemAxios';
+import React, { useEffect, useState } from "react";
+import Navbar from "../../components/Navbar";
+import "../../App.css";
+import moment from "moment";
+import { useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
+import { addItemStock, informationItem } from "../../axios/itemAxios";
+import TextField from "@mui/material/TextField";
+
 const AddItem = () => {
   const navigate = useNavigate();
   const params = useParams();
   const [form, setForm] = useState({
-    id: '',
-    name: '',
-    tanggal: '',
-    stok: '',
+    id: "",
+    name: "",
+    tanggal: "",
+    stok: "",
   });
 
   const { id } = params;
@@ -22,7 +24,7 @@ const AddItem = () => {
         id: result.id,
         stok: result.stok,
         name: result.name,
-        tanggal: moment().format('YYYY-MM-DD h:mm:ss'),
+        tanggal: moment().format("YYYY-MM-DD h:mm:ss"),
       });
     });
   }, []);
@@ -30,9 +32,9 @@ const AddItem = () => {
   const submitHandler = () => {
     // buat redirect
     addItemStock(form, localStorage.access_token, (result) => {
-      if (result.message === 'success') {
-        Swal.fire('Success', 'Tambah data berhasil', 'success').then(() => {
-          navigate('/item');
+      if (result.message === "success") {
+        Swal.fire("Success", "Tambah data berhasil", "success").then(() => {
+          navigate("/item");
         });
       } else {
         console.log(result);
@@ -52,29 +54,47 @@ const AddItem = () => {
                   <h3>Tambah Stok</h3>
                 </div>
                 <div className="input-group mb-3">
-                  <span className="input-group-text" id="basic-addon1">
+                  {/* <span className="input-group-text" id="basic-addon1">
                     Nama
-                  </span>
-                  <input
+                  </span> */}
+                  <TextField
+                    className="form-control"
+                    required
+                    id="outlined-password-input"
+                    label="Name"
+                    type="text"
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    value={form.name}
+                  />
+                  {/* <input
                     type="text"
                     className="form-control"
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     value={form.name}
                     placeholder="Name..."
                     disabled
-                  />
+                  /> */}
                 </div>
                 <div className="input-group mb-3">
-                  <span className="input-group-text" id="basic-addon1">
+                  {/* <span className="input-group-text" id="basic-addon1">
                     Stok
-                  </span>
-                  <input
+                  </span> */}
+                  <TextField
+                    className="form-control"
+                    required
+                    id="outlined-password-input"
+                    label="Stok"
+                    type="number"
+                    value={form.stok}
+                    disabled
+                  />
+                  {/* <input
                     type="text"
                     className="form-control"
                     value={form.stok}
                     placeholder="Stok..."
                     disabled
-                  />
+                  /> */}
                 </div>
                 <div className="input-group mb-3">
                   <input

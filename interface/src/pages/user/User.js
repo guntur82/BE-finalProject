@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import Navbar from '../../components/Navbar';
-import LoadingBar from '../../helpers/LoadingBar';
-import { Link } from 'react-router-dom';
-import { FiPlusSquare } from 'react-icons/fi';
-import { deleteUser, getUsers } from '../../axios/userAxios';
+import React, { useState, useEffect } from "react";
+import Navbar from "../../components/Navbar";
+import LoadingBar from "../../helpers/LoadingBar";
+import { Link } from "react-router-dom";
+import { FiPlusSquare } from "react-icons/fi";
+import { deleteUser, getUsers } from "../../axios/userAxios";
 
 const User = () => {
-  const API_img = 'http://localhost:3000/uploads/';
+  const API_img = "http://localhost:3000/uploads/";
   const [user, setUser] = useState([]);
   useEffect(() => {
     getUsers((result) => setUser(result));
@@ -17,15 +17,18 @@ const User = () => {
   return (
     <>
       <Navbar></Navbar>
+      <h3 className="mb-3 text-center">User</h3>
       <div className="row my-3 text-center">
         <div className="col-9 mx-auto">
-          <div className="w-100">
-            <Link to="/user/create" className="btn btn-sm btn-primary my-2">
-              <span className="me-2">
-                <FiPlusSquare></FiPlusSquare>
-              </span>
-              Tambah user
-            </Link>
+          <div className="row justify-content-end">
+            <div className="col-2">
+              <Link to="/user/create" className="btn btn-sm btn-primary my-2">
+                <span className="me-2">
+                  <FiPlusSquare></FiPlusSquare>
+                </span>
+                Tambah User
+              </Link>
+            </div>
           </div>
           <div className="w-100">
             <table className="table table-border">
@@ -57,25 +60,31 @@ const User = () => {
                         <td>
                           <img
                             alt="gambar"
-                            src={gambar ? API_img + gambar : ''}
+                            src={gambar ? API_img + gambar : ""}
                             className="img-thumbnail"
-                            width={gambar ? '100' : 0}
-                            height={gambar ? '100' : 0}
+                            width={gambar ? "100" : 0}
+                            height={gambar ? "100" : 0}
                           />
                         </td>
                         <td>
-                          <Link
-                            to={`/user/edit/${id}`}
-                            className="btn btn-sm btn-info"
-                          >
-                            Edit
-                          </Link>
-                          <button
-                            onClick={() => deleteHandler(+id)}
-                            className="btn btn-sm btn-danger"
-                          >
-                            Delete
-                          </button>
+                          <div style={{ paddingRight: "10px" }}>
+                            <Link
+                              to={`/user/edit/${id}`}
+                              className="btn btn-sm btn-primary"
+                              style={{ width: "100px" }}
+                            >
+                              Edit
+                            </Link>
+                          </div>
+                          <div style={{ paddingRight: "10px" }}>
+                            <button
+                              onClick={() => deleteHandler(+id)}
+                              className="btn btn-sm btn-danger"
+                              style={{ width: "100px" }}
+                            >
+                              Delete
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     );

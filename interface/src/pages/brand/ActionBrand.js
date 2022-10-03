@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import Navbar from '../../components/Navbar';
-import '../../App.css';
-import { useNavigate, useParams } from 'react-router-dom';
-import Swal from 'sweetalert2';
-import { addBrand, editBrand, informationBrand } from '../../axios/brandAxios';
+import React, { useState, useEffect } from "react";
+import Navbar from "../../components/Navbar";
+import "../../App.css";
+import { useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
+import { addBrand, editBrand, informationBrand } from "../../axios/brandAxios";
+import TextField from "@mui/material/TextField";
 
 const ActionBrand = () => {
   const navigation = useNavigate();
   const [form, setForm] = useState({
-    nama: '',
-    gambar: '',
+    nama: "",
+    gambar: "",
   });
 
   const params = useParams();
@@ -33,9 +34,9 @@ const ActionBrand = () => {
     // buat redirect
     id
       ? editBrand(id, form, (result) => {
-          if (result.data.message === 'success') {
-            Swal.fire('Success', 'Pembaharuan berhasil', 'success').then(() => {
-              navigation('/brand');
+          if (result.data.message === "success") {
+            Swal.fire("Success", "Pembaharuan berhasil", "success").then(() => {
+              navigation("/brand");
             });
           } else {
             console.log(result);
@@ -43,16 +44,16 @@ const ActionBrand = () => {
         })
       : addBrand(form, (result) => {
           if (result.data.nama) {
-            Swal.fire('Success', 'Berhasil membuat akun', 'success').then(
+            Swal.fire("Success", "Berhasil membuat akun", "success").then(
               () => {
-                navigation('/brand');
+                navigation("/brand");
               }
             );
-          } else if (result.data === 'logo') {
+          } else if (result.data === "logo") {
             Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Nama logo sudah digunakan!',
+              icon: "error",
+              title: "Oops...",
+              text: "Nama logo sudah digunakan!",
             });
           } else {
             console.log(result);
@@ -68,15 +69,23 @@ const ActionBrand = () => {
             <div className="card my-5">
               <div className="card-body cardbody-color p-lg-5">
                 <div className="text-center">
-                  <h3>Brand</h3>
+                  <h3>Add Brand</h3>
                 </div>
                 <div className="mb-3">
-                  <input
+                  {/* <input
                     type="text"
                     className="form-control"
                     onChange={(e) => setForm({ ...form, nama: e.target.value })}
                     value={form.nama}
                     placeholder="Name..."
+                  /> */}
+                  <TextField
+                    className="form-control"
+                    required
+                    id="outlined-password-input"
+                    label="Name"
+                    type="text"
+                    onChange={(e) => setForm({ ...form, nama: e.target.value })}
                   />
                 </div>
                 <div className="mb-3">
@@ -87,10 +96,10 @@ const ActionBrand = () => {
                     className="form-control"
                   />
                   <img
-                    src={img ? img.preview : ''}
+                    src={img ? img.preview : ""}
                     className="img-thumbnail"
-                    width={img ? '200' : 0}
-                    height={img ? '200' : 0}
+                    width={img ? "200" : 0}
+                    height={img ? "200" : 0}
                   />
                 </div>
                 <div className="text-center">

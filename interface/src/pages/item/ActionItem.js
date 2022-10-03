@@ -1,24 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import Navbar from '../../components/Navbar';
-import moment from 'moment';
-import '../../App.css';
-import { useNavigate, useParams } from 'react-router-dom';
-import Swal from 'sweetalert2';
-import { addItem, editItem, informationItem } from '../../axios/itemAxios';
-import { getBrand } from '../../axios/brandAxios';
-import { getDetailListItemWarna, getWarna } from '../../axios/warnaAxios';
+import React, { useEffect, useState } from "react";
+import Navbar from "../../components/Navbar";
+import moment from "moment";
+import "../../App.css";
+import { useNavigate, useParams, Link } from "react-router-dom";
+import Swal from "sweetalert2";
+import { addItem, editItem, informationItem } from "../../axios/itemAxios";
+import { getBrand } from "../../axios/brandAxios";
+import { getDetailListItemWarna, getWarna } from "../../axios/warnaAxios";
+import TextField from "@mui/material/TextField";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import { FiX } from "react-icons/fi";
+import Select from "@mui/material/Select";
 
 const ActionItem = () => {
-  const API_img = 'http://localhost:3000/uploads/';
+  const API_img = "http://localhost:3000/uploads/";
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    name: '',
-    harga: '',
-    gambar: '',
-    deskripsi: '',
-    tanggal: moment().format('YYYY-MM-DD'),
-    stok: '',
-    brandId: '',
+    name: "",
+    harga: "",
+    gambar: "",
+    deskripsi: "",
+    tanggal: moment().format("YYYY-MM-DD"),
+    stok: "",
+    brandId: "",
   });
   const [brand, setBrand] = useState([]);
   const [warna, setWarna] = useState([]);
@@ -106,18 +112,18 @@ const ActionItem = () => {
     console.log(form);
     id
       ? editItem(id, form, localStorage.access_token, (result) => {
-          if (result.data.message === 'success') {
-            Swal.fire('Success', 'Pembaharuan berhasil', 'success').then(() => {
-              navigate('/item');
+          if (result.data.message === "success") {
+            Swal.fire("Success", "Pembaharuan berhasil", "success").then(() => {
+              navigate("/item");
             });
           } else {
             console.log(result);
           }
         })
       : addItem(form, localStorage.access_token, (result) => {
-          if (result.data.message === 'success') {
-            Swal.fire('Success', 'Berhasil ditambahkan', 'success').then(() => {
-              navigate('/item');
+          if (result.data.message === "success") {
+            Swal.fire("Success", "Berhasil ditambahkan", "success").then(() => {
+              navigate("/item");
             });
           } else {
             console.log(result);
@@ -131,21 +137,48 @@ const ActionItem = () => {
         <div className="row">
           <div className="col-md-6 offset-md-3">
             <div className="card my-5">
+              <div className="row justify-content-end">
+                <div className="col-2">
+                  <Link to="/item">
+                    <FiX></FiX>
+                  </Link>
+                </div>
+              </div>
               <div className="card-body cardbody-color p-lg-5">
                 <div className="text-center">
-                  <h3>Item</h3>
+                  <h3>Tambah Item</h3>
                 </div>
                 <div className="mb-3">
-                  <input
+                  <TextField
+                    className="form-control"
+                    required
+                    id="outlined-password-input"
+                    label="Name"
+                    type="text"
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    value={form.name}
+                  />
+                  {/* <input
                     type="text"
                     className="form-control"
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     value={form.name}
                     placeholder="Name..."
-                  />
+                  /> */}
                 </div>
                 <div className="mb-3">
-                  <input
+                  <TextField
+                    className="form-control"
+                    required
+                    id="outlined-password-input"
+                    label="Harga"
+                    type="number"
+                    onChange={(e) =>
+                      setForm({ ...form, harga: e.target.value })
+                    }
+                    value={form.harga}
+                  />
+                  {/* <input
                     type="number"
                     className="form-control"
                     onChange={(e) =>
@@ -153,10 +186,22 @@ const ActionItem = () => {
                     }
                     value={form.harga}
                     placeholder="Harga..."
-                  />
+                  /> */}
                 </div>
                 <div className="mb-3">
-                  <textarea
+                  <TextField
+                    required
+                    className="form-control"
+                    id="outlined-multiline-static"
+                    label="Deskripsi"
+                    multiline
+                    rows={4}
+                    onChange={(e) =>
+                      setForm({ ...form, deskripsi: e.target.value })
+                    }
+                    value={form.deskripsi}
+                  />
+                  {/* <textarea
                     type="text"
                     className="form-control"
                     onChange={(e) =>
@@ -164,7 +209,7 @@ const ActionItem = () => {
                     }
                     value={form.deskripsi}
                     placeholder="Deskripsi..."
-                  />
+                  /> */}
                 </div>
                 <div className="mb-3">
                   <input
@@ -177,7 +222,21 @@ const ActionItem = () => {
                   />
                 </div>
                 <div className="mb-3">
-                  <input
+                  <TextField
+                    className="form-control"
+                    required
+                    id="outlined-password-input"
+                    label="Stok"
+                    type="number"
+                    onKeyPress={(event) => {
+                      if (!/[0-9]/.test(event.key)) {
+                        event.preventDefault();
+                      }
+                    }}
+                    onChange={(e) => setForm({ ...form, stok: e.target.value })}
+                    value={form.harga}
+                  />
+                  {/* <input
                     type="text"
                     className="form-control"
                     onKeyPress={(event) => {
@@ -188,10 +247,35 @@ const ActionItem = () => {
                     onChange={(e) => setForm({ ...form, stok: e.target.value })}
                     value={form.stok}
                     placeholder="Stok..."
-                  />
+                  /> */}
                 </div>
                 <div className="mb-3">
-                  <label>Brand :</label>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Brand</InputLabel>
+                    <Select
+                      required
+                      className="form-select"
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      label="Age"
+                      placeholder="Pilih Brand"
+                      onChange={(e) =>
+                        setForm({ ...form, brandId: e.target.value })
+                      }
+                      value={form.brandId}
+                    >
+                      {/* <MenuItem>Pilih Brand</MenuItem> */}
+                      {brand.map((brands, i) => {
+                        const { id, nama } = brands;
+                        return (
+                          <MenuItem value={id} key={id}>
+                            {nama}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                  {/* <label>Brand :</label>
                   <select
                     className="form-select"
                     onChange={(e) =>
@@ -208,7 +292,7 @@ const ActionItem = () => {
                         </option>
                       );
                     })}
-                  </select>
+                  </select> */}
                 </div>
                 <label className="mb-3">Warna yang dimiliki :</label>
                 {warna.map((warnas, i) => {
@@ -232,7 +316,7 @@ const ActionItem = () => {
                         onChange={(e) => changeCheck(e.target.checked)}
                         style={{
                           backgroundColor: nama_warna,
-                          borderColor: 'black',
+                          borderColor: "black",
                         }}
                         type="checkbox"
                         defaultChecked={warnas.check}
@@ -262,10 +346,10 @@ const ActionItem = () => {
                     className="form-control"
                   />
                   <img
-                    src={img ? img.preview : ''}
+                    src={img ? img.preview : ""}
                     className="img-thumbnail"
-                    width={img ? '200' : 0}
-                    height={img ? '200' : 0}
+                    width={img ? "200" : 0}
+                    height={img ? "200" : 0}
                   />
                 </div>
                 <div className="text-center">
