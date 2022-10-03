@@ -1,6 +1,6 @@
-import React from 'react';
-import 'bootstrap/dist/css/bootstrap.css';
-import './App.css';
+import React from "react";
+import "bootstrap/dist/css/bootstrap.css";
+import "./App.css";
 import {
   Home,
   Login,
@@ -15,12 +15,12 @@ import {
   ActionWarna,
   AddItem,
   Profile,
-} from './pages';
-import { Routes, Route } from 'react-router-dom';
+} from "./pages";
+import { Routes, Route } from "react-router-dom";
 
 function App() {
   return (
-    <div className="main-page container-fluid">
+    <div className="main-page">
       <Routes>
         <Route path="" element={<Login />}></Route>
         <Route path="register" element={<Register />}></Route>
