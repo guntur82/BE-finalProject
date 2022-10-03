@@ -5,6 +5,14 @@ import { Link } from "react-router-dom";
 import { FiPlusSquare } from "react-icons/fi";
 import { deleteItem, getItem, historyItem } from "../../axios/itemAxios";
 import { getListItemWarna } from "../../axios/warnaAxios";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import { styled } from "@mui/material/styles";
 
 const Item = () => {
   const API_img = "http://localhost:3000/uploads/";
@@ -23,7 +31,25 @@ const Item = () => {
   const deleteHandler = (id) => {
     deleteItem(id);
   };
-
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: "#bfd1ec",
+      color: theme.palette.common.black,
+      fontStyle: "bold",
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    "&:last-child td, &:last-child th": {
+      border: 0,
+    },
+  }));
   return (
     <>
       <Navbar></Navbar>
@@ -52,83 +78,84 @@ const Item = () => {
             </select>
           </div>
           <div className="w-100">
-            <table className="table table-border">
-              <thead>
-                {sorting.data ? (
-                  <tr className="table-primary">
-                    <th>No</th>
-                    <th>Nama User</th>
-                    <th>Nama Barang</th>
-                    <th>Jumlah</th>
-                    <th>Tanggal</th>
-                  </tr>
-                ) : (
-                  <tr className="table-primary">
-                    <th>No</th>
-                    <th>Nama</th>
-                    <th>Harga</th>
-                    <th>Deksripsi</th>
-                    <th>Tanggal</th>
-                    <th>Stok</th>
-                    <th>Penjual</th>
-                    <th>Brand</th>
-                    <th>Warna</th>
-                    <th>Gambar</th>
-                    <th>Action</th>
-                  </tr>
-                )}
-              </thead>
-              <tbody>
-                {sorting.data ? (
-                  history.length > 0 ? (
-                    history.map((historys, key) => {
-                      const { id, jumlah, tanggal } = historys;
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 750 }} aria-label="simple table">
+                <TableHead>
+                  <StyledTableRow>
+                    <StyledTableCell align="center">No.</StyledTableCell>
+                    <StyledTableCell align="center">Nama</StyledTableCell>
+                    <StyledTableCell align="center">Harga</StyledTableCell>
+                    <StyledTableCell align="center">Deksripsi</StyledTableCell>
+                    <StyledTableCell align="center">Tanggal</StyledTableCell>
+                    <StyledTableCell align="center">Stok</StyledTableCell>
+                    <StyledTableCell align="center">Penjual</StyledTableCell>
+                    <StyledTableCell align="center">Brand</StyledTableCell>
+                    <StyledTableCell align="center">Warna</StyledTableCell>
+                    <StyledTableCell align="center">Gambar</StyledTableCell>
+                    <StyledTableCell align="center">Action</StyledTableCell>
+                  </StyledTableRow>
+                </TableHead>
+                <TableBody>
+                  {sorting.data ? (
+                    history.length > 0 ? (
+                      history.map((historys, key) => {
+                        const { id, jumlah, tanggal } = historys;
+                        return (
+                          <StyledTableRow key={id}>
+                            <StyledTableCell>{key + 1}</StyledTableCell>
+                            <StyledTableCell>
+                              {historys.user.name}
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              {historys.item.name}
+                            </StyledTableCell>
+                            <StyledTableCell>{historys.jumlah}</StyledTableCell>
+                            <StyledTableCell>
+                              {historys.tanggal}
+                            </StyledTableCell>
+                          </StyledTableRow>
+                        );
+                      })
+                    ) : (
+                      <LoadingBar />
+                    )
+                  ) : item.length > 0 ? (
+                    item.map((items, key) => {
+                      console.log(items);
+                      const {
+                        id,
+                        name,
+                        harga,
+                        gambar,
+                        deskripsi,
+                        tanggal,
+                        stok,
+                        userId,
+                        brandId,
+                      } = items;
                       return (
-                        <tr key={id}>
-                          <td>{key + 1}</td>
-                          <td>{historys.user.name}</td>
-                          <td>{historys.item.name}</td>
-                          <td>{historys.jumlah}</td>
-                          <td>{historys.tanggal}</td>
-                        </tr>
-                      );
-                    })
-                  ) : (
-                    <LoadingBar />
-                  )
-                ) : item.length > 0 ? (
-                  item.map((items, key) => {
-                    console.log(items);
-                    const {
-                      id,
-                      name,
-                      harga,
-                      gambar,
-                      deskripsi,
-                      tanggal,
-                      stok,
-                      userId,
-                      brandId,
-                    } = items;
-                    return (
-                      <tr key={id}>
-                        <td>{key + 1}</td>
-                        <td>{name}</td>
-                        <td>
-                          Rp.
-                          {new Intl.NumberFormat("de-DE", {
-                            prefix: "Rp",
-                            centsLimit: 0,
-                            thousandsSeparator: ".",
-                          }).format(harga)}
-                        </td>
-                        <td>{deskripsi}</td>
-                        <td>{tanggal}</td>
-                        <td>{stok}</td>
-                        <td>{userId ? items.user.name : " - "}</td>
-                        <td>{brandId ? items.brand.name : " - "}</td>
-                        <td>
-                          {/* {listWarna.map((data, i) => {
+                        <StyledTableRow key={id}>
+                          <StyledTableCell>{key + 1}</StyledTableCell>
+                          <StyledTableCell>{name}</StyledTableCell>
+                          <StyledTableCell>
+                            Rp.
+                            {new Intl.NumberFormat("de-DE", {
+                              prefix: "Rp",
+                              centsLimit: 0,
+                              thousandsSeparator: ".",
+                            }).format(harga)}
+                          </StyledTableCell>
+                          <StyledTableCell>{deskripsi}</StyledTableCell>
+                          <StyledTableCell>{tanggal}</StyledTableCell>
+                          <StyledTableCell>{stok}</StyledTableCell>
+                          <StyledTableCell>
+                            {userId ? items.user.name : " - "}
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            {brandId ? items.brand.name : " - "}
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            {/* {listWarna.map((data, i) => {
                             const { itemId } = data;
                             if (id === itemId) {
                               return (
@@ -147,80 +174,81 @@ const Item = () => {
                               );
                             }
                           })} */}
-                          <select>
-                            {listWarna.map((data, i) => {
-                              const { itemId } = data;
-                              if (id === itemId) {
-                                return (
-                                  <option>
-                                    <p>{data.warna.nama_warna}</p>
-                                  </option>
-                                );
-                              }
-                            })}
-                          </select>
-                        </td>
-                        <td>
-                          <img
-                            alt="gambar"
-                            src={gambar ? API_img + gambar : ""}
-                            className="img-thumbnail"
-                            width={gambar ? "100" : 0}
-                            height={gambar ? "100" : 0}
-                          />
-                        </td>
-                        <td>
-                          <div
-                            style={{
-                              paddingRight: "10px",
-                              paddingBottom: "10px",
-                            }}
-                          >
-                            <Link
-                              to={`/item/edit/${id}`}
-                              className="btn btn-sm btn-primary"
-                              style={{ width: "100px" }}
+                            <select>
+                              {listWarna.map((data, i) => {
+                                const { itemId } = data;
+                                if (id === itemId) {
+                                  return (
+                                    <option>
+                                      <p>{data.warna.nama_warna}</p>
+                                    </option>
+                                  );
+                                }
+                              })}
+                            </select>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <img
+                              alt="gambar"
+                              src={gambar ? API_img + gambar : ""}
+                              className="img-thumbnail"
+                              width={gambar ? "100" : 0}
+                              height={gambar ? "100" : 0}
+                            />
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <div
+                              style={{
+                                paddingRight: "10px",
+                                paddingBottom: "10px",
+                              }}
                             >
-                              Edit
-                            </Link>
-                          </div>
-                          <div
-                            style={{
-                              paddingRight: "10px",
-                              paddingBottom: "10px",
-                            }}
-                          >
-                            <Link
-                              to={`/item/add/${id}`}
-                              className="btn btn-sm btn-success"
-                              style={{ width: "100px" }}
+                              <Link
+                                to={`/item/edit/${id}`}
+                                className="btn btn-sm btn-primary"
+                                style={{ width: "100px" }}
+                              >
+                                Edit
+                              </Link>
+                            </div>
+                            <div
+                              style={{
+                                paddingRight: "10px",
+                                paddingBottom: "10px",
+                              }}
                             >
-                              Tambah
-                            </Link>
-                          </div>
-                          <div
-                            style={{
-                              paddingRight: "10px",
-                              paddingBottom: "10px",
-                            }}
-                          >
-                            <button
-                              onClick={() => deleteHandler(+id)}
-                              className="btn btn-sm btn-danger"
-                              style={{ width: "100px" }}
+                              <Link
+                                to={`/item/add/${id}`}
+                                className="btn btn-sm btn-success"
+                                style={{ width: "100px" }}
+                              >
+                                Tambah
+                              </Link>
+                            </div>
+                            <div
+                              style={{
+                                paddingRight: "10px",
+                                paddingBottom: "10px",
+                              }}
                             >
-                              Delete
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })
-                ) : (
-                  <LoadingBar />
-                )}
-              </tbody>
-            </table>
+                              <button
+                                onClick={() => deleteHandler(+id)}
+                                className="btn btn-sm btn-danger"
+                                style={{ width: "100px" }}
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      );
+                    })
+                  ) : (
+                    <LoadingBar />
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </div>
         </div>
       </div>
