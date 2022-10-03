@@ -98,11 +98,6 @@ const Profile = () => {
     <>
       <Navbar></Navbar>
       <div className="container bootstrap snippet">
-        <div className="row">
-          <div className="col-sm-10 text-center">
-            <h1>Edit Profile</h1>
-          </div>
-        </div>
         <div className="row cardbody-color p-lg-5">
           <div className="col-sm-3">
             <div className="text-center">
@@ -123,6 +118,11 @@ const Profile = () => {
           <div className="col-sm-9">
             <div className="tab-content">
               <div className="tab-pane active" id="home">
+                <div className="row">
+                  <div className="col-sm-10 text-center">
+                    <h1>Edit Profile</h1>
+                  </div>
+                </div>
                 <hr />
                 <form
                   className="form"
