@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
-import LoadingBar from "../helpers/LoadingBar";
-import { useNavigate } from "react-router-dom";
-import { AiOutlineQuestion } from "react-icons/ai";
-import { FiCheck } from "react-icons/fi";
-import Swal from "sweetalert2";
-import { deleteCart, editCart, getCart } from "../axios/cartAxios";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import { styled } from "@mui/material/styles";
+import React, { useEffect, useState } from 'react';
+import Navbar from '../components/Navbar';
+import LoadingBar from '../helpers/LoadingBar';
+import { useNavigate } from 'react-router-dom';
+import { AiOutlineQuestion } from 'react-icons/ai';
+import { FiCheck } from 'react-icons/fi';
+import Swal from 'sweetalert2';
+import { deleteCart, editCart, getCart } from '../axios/cartAxios';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { styled } from '@mui/material/styles';
 
 const Home = () => {
   const navigate = useNavigate();
 
   const [cart, setCart] = useState([]);
   useEffect(() => {
-    if (!localStorage.getItem("access_token")) {
-      navigate("/");
+    if (!localStorage.getItem('access_token')) {
+      navigate('/');
     }
     getCart((result) => setCart(result));
     // biar 1x load
@@ -31,15 +31,15 @@ const Home = () => {
     deleteCart(id);
   };
   const [status, setStatus] = useState({
-    status_barang: "",
-    status_pengiriman: "",
+    status_barang: '',
+    status_pengiriman: '',
   });
   const approveHandler = (id) => {
     status.status_barang = 1;
     status.status_pengiriman = 1;
     editCart(id, status, (result) => {
-      if (result.data.message === "success") {
-        Swal.fire("Success", "Pembaharuan berhasil", "success");
+      if (result.data.message === 'success') {
+        Swal.fire('Success', 'Pembaharuan berhasil', 'success');
       } else {
         console.log(result);
       }
@@ -47,21 +47,21 @@ const Home = () => {
   };
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: "#bfd1ec",
+      backgroundColor: '#bfd1ec',
       fontSize: 20,
       color: theme.palette.common.black,
-      fontStyle: "bold",
+      fontStyle: 'bold',
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
     },
   }));
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    "&:nth-of-type(odd)": {
+    '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.action.hover,
     },
     // hide last border
-    "&:last-child td, &:last-child th": {
+    '&:last-child td, &:last-child th': {
       border: 0,
     },
   }));
@@ -102,12 +102,22 @@ const Home = () => {
                       if (status_barang === 1) {
                         return (
                           <StyledTableRow key={id}>
-                            <StyledTableCell>{key + 1}</StyledTableCell>
-                            <StyledTableCell>{carts.user.name}</StyledTableCell>
-                            <StyledTableCell>{carts.item.name}</StyledTableCell>
-                            <StyledTableCell>{tanggal}</StyledTableCell>
-                            <StyledTableCell>{jumlah}</StyledTableCell>
-                            <StyledTableCell>
+                            <StyledTableCell align="center">
+                              {key + 1}
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              {carts.user.name}
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              {carts.item.name}
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              {tanggal}
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              {jumlah}
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
                               {status_pengiriman === 0 ? (
                                 <AiOutlineQuestion />
                               ) : (
