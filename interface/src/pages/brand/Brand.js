@@ -25,6 +25,7 @@ const Brand = () => {
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: "#bfd1ec",
+      fontSize: 20,
       color: theme.palette.common.black,
       fontStyle: "bold",
     },
