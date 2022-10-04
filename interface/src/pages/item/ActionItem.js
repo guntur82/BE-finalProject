@@ -318,7 +318,7 @@ const ActionItem = () => {
                   </select> */}
                 </div>
                 <label className="mb-3">Warna yang dimiliki :</label>
-                <Select
+                {/* <Select
                   labelId="demo-multiple-checkbox-label"
                   id="demo-multiple-checkbox"
                   multiple
@@ -334,7 +334,7 @@ const ActionItem = () => {
                       <ListItemText primary={nama_warna} />
                     </MenuItem>;
                   })}
-                </Select>
+                </Select> */}
 
                 {warna.map((warnas, i) => {
                   warnas.check = false;

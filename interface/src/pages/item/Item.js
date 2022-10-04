@@ -1,33 +1,33 @@
-import React, { useEffect, useState } from "react";
-import Navbar from "../../components/Navbar";
-import LoadingBar from "../../helpers/LoadingBar";
-import { Link } from "react-router-dom";
-import { FiPlusSquare } from "react-icons/fi";
-import { deleteItem, getItem, historyItem } from "../../axios/itemAxios";
-import { getListItemWarna } from "../../axios/warnaAxios";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import TablePagination from "@mui/material/TablePagination";
-import Paper from "@mui/material/Paper";
-import { styled } from "@mui/material/styles";
-import Chip from "@mui/material/Chip";
-import Stack from "@mui/material/Stack";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
+import React, { useEffect, useState } from 'react';
+import Navbar from '../../components/Navbar';
+import LoadingBar from '../../helpers/LoadingBar';
+import { Link } from 'react-router-dom';
+import { FiPlusSquare } from 'react-icons/fi';
+import { deleteItem, getItem, historyItem } from '../../axios/itemAxios';
+import { getListItemWarna } from '../../axios/warnaAxios';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import TablePagination from '@mui/material/TablePagination';
+import Paper from '@mui/material/Paper';
+import { styled } from '@mui/material/styles';
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 
 const Item = () => {
-  const API_img = "http://localhost:3000/uploads/";
+  const API_img = 'http://localhost:3000/uploads/';
   const [item, setItem] = useState([]);
   const [listWarna, setListWarna] = useState([]);
   const [history, setHistory] = useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sorting, setSorting] = useState({
-    data: "",
+    data: '',
   });
 
   useEffect(() => {
@@ -40,21 +40,21 @@ const Item = () => {
   };
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: "#bfd1ec",
+      backgroundColor: '#bfd1ec',
       color: theme.palette.common.black,
       fontSize: 20,
-      fontStyle: "bold",
+      fontStyle: 'bold',
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
     },
   }));
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    "&:nth-of-type(odd)": {
+    '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.action.hover,
     },
     // hide last border
-    "&:last-child td, &:last-child th": {
+    '&:last-child td, &:last-child th': {
       border: 0,
     },
   }));
@@ -86,7 +86,7 @@ const Item = () => {
             </div>
             <select
               className="form-select"
-              style={{ width: "auto" }}
+              style={{ width: 'auto' }}
               onChange={(e) => setSorting({ ...sorting, data: e.target.value })}
             >
               <option value="">Item</option>
@@ -161,26 +161,27 @@ const Item = () => {
                           userId,
                           brandId,
                         } = items;
+                        console.log(items);
                         return (
                           <StyledTableRow key={id}>
                             <StyledTableCell>{key + 1}</StyledTableCell>
                             <StyledTableCell>{name}</StyledTableCell>
                             <StyledTableCell>
                               Rp.
-                              {new Intl.NumberFormat("de-DE", {
-                                prefix: "Rp",
+                              {new Intl.NumberFormat('de-DE', {
+                                prefix: 'Rp',
                                 centsLimit: 0,
-                                thousandsSeparator: ".",
+                                thousandsSeparator: '.',
                               }).format(harga)}
                             </StyledTableCell>
                             <StyledTableCell>{deskripsi}</StyledTableCell>
                             <StyledTableCell>{tanggal}</StyledTableCell>
                             <StyledTableCell>{stok}</StyledTableCell>
                             <StyledTableCell>
-                              {userId ? items.user.name : " - "}
+                              {userId ? items.user.name : ' - '}
                             </StyledTableCell>
                             <StyledTableCell>
-                              {brandId ? items.brand.name : " - "}
+                              {brandId ? items.brand.nama : ' - '}
                             </StyledTableCell>
                             <StyledTableCell>
                               {/* {listWarna.map((data, i) => {
@@ -203,7 +204,7 @@ const Item = () => {
                             }
                           })} */}
                               {/* <Stack direction="row" spacing={1} maxRow="3"> */}
-                              <Box sx={{ width: "100%" }}>
+                              <Box sx={{ width: '100%' }}>
                                 <Grid
                                   sx={{ flexGrow: 2 }}
                                   container
@@ -219,7 +220,7 @@ const Item = () => {
                                           variant="outlined"
                                           style={{
                                             // backgroundColor: data.warna.nama_warna,
-                                            borderColor: "black",
+                                            borderColor: 'black',
                                           }}
                                         ></Chip>
                                         // <option>
@@ -243,51 +244,51 @@ const Item = () => {
                             <StyledTableCell>
                               <img
                                 alt="gambar"
-                                src={gambar ? API_img + gambar : ""}
+                                src={gambar ? API_img + gambar : ''}
                                 className="img-thumbnail"
-                                width={gambar ? "100" : 0}
-                                height={gambar ? "100" : 0}
+                                width={gambar ? '100' : 0}
+                                height={gambar ? '100' : 0}
                               />
                             </StyledTableCell>
                             <StyledTableCell>
                               <div
                                 style={{
-                                  paddingRight: "10px",
-                                  paddingBottom: "10px",
+                                  paddingRight: '10px',
+                                  paddingBottom: '10px',
                                 }}
                               >
                                 <Link
                                   to={`/item/edit/${id}`}
                                   className="btn btn-sm btn-primary"
-                                  style={{ width: "100px" }}
+                                  style={{ width: '100px' }}
                                 >
                                   Edit
                                 </Link>
                               </div>
                               <div
                                 style={{
-                                  paddingRight: "10px",
-                                  paddingBottom: "10px",
+                                  paddingRight: '10px',
+                                  paddingBottom: '10px',
                                 }}
                               >
                                 <Link
                                   to={`/item/add/${id}`}
                                   className="btn btn-sm btn-success"
-                                  style={{ width: "100px" }}
+                                  style={{ width: '100px' }}
                                 >
                                   Tambah
                                 </Link>
                               </div>
                               <div
                                 style={{
-                                  paddingRight: "10px",
-                                  paddingBottom: "10px",
+                                  paddingRight: '10px',
+                                  paddingBottom: '10px',
                                 }}
                               >
                                 <button
                                   onClick={() => deleteHandler(+id)}
                                   className="btn btn-sm btn-danger"
-                                  style={{ width: "100px" }}
+                                  style={{ width: '100px' }}
                                 >
                                   Delete
                                 </button>
