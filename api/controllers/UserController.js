@@ -206,8 +206,8 @@ class UserController {
       if (!verifyToken) return res.json(false);
       // verifyToken = {id,name,email,gambar,no_hp,alamat}
       const { id } = verifyToken;
-      const user = await user.findByPk(id);
-      if (!user) return res.json(false);
+      const users = await user.findByPk(id);
+      if (!users) return res.json(false);
       res.json(true);
     } catch (error) {
       res.status(500).json(error);
@@ -216,10 +216,12 @@ class UserController {
 
   static async user(req, res) {
     try {
-      const id = req.userData.id;
+      const token = req.header('auth');
+      let verifyToken = tokenVerifier(token);
+      const id = verifyToken.id;
       const result = await user.findByPk(id);
       // res.json({ ...result.dataValues, token: req.authToken });
-      res.json({ ...result, token: req.authToken });
+      res.json({ ...result.dataValues, token: token, id: String(result.id) });
     } catch (error) {
       res.status(500).json(error);
     }

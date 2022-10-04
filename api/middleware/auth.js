@@ -6,7 +6,6 @@ const auth = (req, res, next) => {
   if (access_token) {
     try {
       let verifyToken = tokenVerifier(access_token);
-      req.authToken = access_token;
       req.userData = verifyToken;
       next();
     } catch (error) {
