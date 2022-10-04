@@ -398,7 +398,7 @@ const ActionItem = () => {
                     onClick={() => submitHandler()}
                     className="btn btn-color px-5 mb-5 w-100"
                   >
-                    Register
+                    Simpan
                   </button>
                 </div>
               </div>
