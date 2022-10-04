@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from "react";
-import Navbar from "../../components/Navbar";
-import moment from "moment";
-import "../../App.css";
-import { useNavigate, useParams, Link } from "react-router-dom";
-import Swal from "sweetalert2";
-import { addItem, editItem, informationItem } from "../../axios/itemAxios";
-import { getBrand } from "../../axios/brandAxios";
-import { getDetailListItemWarna, getWarna } from "../../axios/warnaAxios";
-import TextField from "@mui/material/TextField";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import { FiX } from "react-icons/fi";
-import ListItemText from "@mui/material/ListItemText";
-import Select from "@mui/material/Select";
-import Checkbox from "@mui/material/Checkbox";
-import OutlinedInput from "@mui/material/OutlinedInput";
+import React, { useEffect, useState } from 'react';
+import Navbar from '../../components/Navbar';
+import moment from 'moment';
+import '../../App.css';
+import { useNavigate, useParams, Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import { addItem, editItem, informationItem } from '../../axios/itemAxios';
+import { getBrand } from '../../axios/brandAxios';
+import { getDetailListItemWarna, getWarna } from '../../axios/warnaAxios';
+import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import { FiX } from 'react-icons/fi';
+import ListItemText from '@mui/material/ListItemText';
+import Select from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
+import OutlinedInput from '@mui/material/OutlinedInput';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -29,16 +29,16 @@ const MenuProps = {
 };
 
 const ActionItem = () => {
-  const API_img = "http://localhost:3000/uploads/";
+  const API_img = 'http://localhost:3000/uploads/';
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    name: "",
-    harga: "",
-    gambar: "",
-    deskripsi: "",
-    tanggal: moment().format("YYYY-MM-DD"),
-    stok: "",
-    brandId: "",
+    name: '',
+    harga: '',
+    gambar: '',
+    deskripsi: '',
+    tanggal: moment().format('YYYY-MM-DD'),
+    stok: '',
+    brandId: '',
   });
   const [brand, setBrand] = useState([]);
   const [warna, setWarna] = useState([]);
@@ -126,18 +126,18 @@ const ActionItem = () => {
     console.log(form);
     id
       ? editItem(id, form, localStorage.access_token, (result) => {
-          if (result.data.message === "success") {
-            Swal.fire("Success", "Pembaharuan berhasil", "success").then(() => {
-              navigate("/item");
+          if (result.data.message === 'success') {
+            Swal.fire('Success', 'Pembaharuan berhasil', 'success').then(() => {
+              navigate('/item');
             });
           } else {
             console.log(result);
           }
         })
       : addItem(form, localStorage.access_token, (result) => {
-          if (result.data.message === "success") {
-            Swal.fire("Success", "Berhasil ditambahkan", "success").then(() => {
-              navigate("/item");
+          if (result.data.message === 'success') {
+            Swal.fire('Success', 'Berhasil ditambahkan', 'success').then(() => {
+              navigate('/item');
             });
           } else {
             console.log(result);
@@ -150,7 +150,7 @@ const ActionItem = () => {
     } = event;
     setWarna(
       // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
+      typeof value === 'string' ? value.split(',') : value
     );
   };
   return (
@@ -257,7 +257,7 @@ const ActionItem = () => {
                       }
                     }}
                     onChange={(e) => setForm({ ...form, stok: e.target.value })}
-                    value={form.harga}
+                    value={form.stok}
                   />
                   {/* <input
                     type="text"
@@ -324,7 +324,7 @@ const ActionItem = () => {
                   multiple
                   onChange={handleChange}
                   input={<OutlinedInput label="Tag" />}
-                  renderValue={(selected) => selected.join(", ")}
+                  renderValue={(selected) => selected.join(', ')}
                   MenuProps={MenuProps}
                 >
                   {warna.map((warnas, i) => {
@@ -357,7 +357,7 @@ const ActionItem = () => {
                         onChange={(e) => changeCheck(e.target.checked)}
                         style={{
                           backgroundColor: nama_warna,
-                          borderColor: "black",
+                          borderColor: 'black',
                         }}
                         type="checkbox"
                         defaultChecked={warnas.check}
@@ -387,10 +387,10 @@ const ActionItem = () => {
                     className="form-control"
                   />
                   <img
-                    src={img ? img.preview : ""}
+                    src={img ? img.preview : ''}
                     className="img-thumbnail"
-                    width={img ? "200" : 0}
-                    height={img ? "200" : 0}
+                    width={img ? '200' : 0}
+                    height={img ? '200' : 0}
                   />
                 </div>
                 <div className="text-center">
