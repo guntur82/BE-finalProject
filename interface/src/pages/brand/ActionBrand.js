@@ -8,6 +8,7 @@ import TextField from "@mui/material/TextField";
 
 const ActionBrand = () => {
   const navigation = useNavigate();
+
   const [form, setForm] = useState({
     nama: "",
     gambar: "",
@@ -31,6 +32,7 @@ const ActionBrand = () => {
     setForm({ ...form, gambar: e.target.files[0] });
   };
   const submitHandler = () => {
+    // console.log(form);
     // buat redirect
     id
       ? editBrand(id, form, (result) => {
@@ -60,6 +62,7 @@ const ActionBrand = () => {
           }
         });
   };
+
   return (
     <>
       <Navbar></Navbar>
@@ -85,6 +88,7 @@ const ActionBrand = () => {
                     id="outlined-password-input"
                     label="Name"
                     type="text"
+                    value={form.nama}
                     onChange={(e) => setForm({ ...form, nama: e.target.value })}
                   />
                 </div>

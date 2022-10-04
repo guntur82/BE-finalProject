@@ -11,10 +11,13 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import TablePagination from "@mui/material/TablePagination";
 import { styled } from "@mui/material/styles";
 
 const Warna = () => {
   const [warna, setWarna] = useState([]);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   useEffect(() => {
     getWarna((result) => setWarna(result));
   }, []);
@@ -41,6 +44,14 @@ const Warna = () => {
       border: 0,
     },
   }));
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
   return (
     <>
       <Navbar></Navbar>
@@ -74,62 +85,76 @@ const Warna = () => {
                 </TableHead>
                 <TableBody>
                   {warna.length > 0 ? (
-                    warna.map((warnas, key) => {
-                      const { id, nama_warna } = warnas;
-                      return (
-                        <StyledTableRow key={id}>
-                          <TableCell align="center">{key + 1}</TableCell>
-                          <TableCell>
-                            <div className="pallete" align="center">
-                              <div className="kotak">
-                                <div
-                                  className="box"
-                                  style={{
-                                    backgroundColor: nama_warna,
-                                    borderColor: "black",
-                                  }}
-                                >
-                                  <p>{nama_warna}</p>
+                    warna
+                      .slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                      .map((warnas, key) => {
+                        const { id, nama_warna } = warnas;
+                        return (
+                          <StyledTableRow key={id}>
+                            <TableCell align="center">{key + 1}</TableCell>
+                            <TableCell>
+                              <div className="pallete" align="center">
+                                <div className="kotak">
+                                  <div
+                                    className="box"
+                                    style={{
+                                      backgroundColor: nama_warna,
+                                      borderColor: "black",
+                                    }}
+                                  >
+                                    <p>{nama_warna}</p>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </TableCell>
-                          <TableCell align="center">
-                            <div
-                              style={{
-                                paddingRight: "10px",
-                                paddingRight: "10px",
-                                paddingRight: "10px",
-                                paddingBottom: "10px",
-                              }}
-                            >
-                              <Link
-                                to={`/warna/edit/${id}`}
-                                className="btn btn-sm btn-primary"
-                                style={{ width: "100px" }}
+                            </TableCell>
+                            <TableCell align="center">
+                              <div
+                                style={{
+                                  paddingRight: "10px",
+                                  paddingRight: "10px",
+                                  paddingRight: "10px",
+                                  paddingBottom: "10px",
+                                }}
                               >
-                                Edit
-                              </Link>
-                            </div>
-                            <div style={{ paddingRight: "10px" }}>
-                              <button
-                                onClick={() => deleteHandler(+id)}
-                                className="btn btn-sm btn-danger"
-                                style={{ width: "100px" }}
-                              >
-                                Delete
-                              </button>
-                            </div>
-                          </TableCell>
-                        </StyledTableRow>
-                      );
-                    })
+                                <Link
+                                  to={`/warna/edit/${id}`}
+                                  className="btn btn-sm btn-primary"
+                                  style={{ width: "100px" }}
+                                >
+                                  Edit
+                                </Link>
+                              </div>
+                              <div style={{ paddingRight: "10px" }}>
+                                <button
+                                  onClick={() => deleteHandler(+id)}
+                                  className="btn btn-sm btn-danger"
+                                  style={{ width: "100px" }}
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            </TableCell>
+                          </StyledTableRow>
+                        );
+                      })
                   ) : (
                     <LoadingBar />
                   )}
                 </TableBody>
               </Table>
             </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={warna.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
           </div>
         </div>
       </div>

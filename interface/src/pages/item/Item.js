@@ -11,17 +11,21 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import TablePagination from "@mui/material/TablePagination";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
 
 const Item = () => {
   const API_img = "http://localhost:3000/uploads/";
   const [item, setItem] = useState([]);
   const [listWarna, setListWarna] = useState([]);
   const [history, setHistory] = useState([]);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sorting, setSorting] = useState({
     data: "",
   });
@@ -54,6 +58,14 @@ const Item = () => {
       border: 0,
     },
   }));
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
   return (
     <>
       <Navbar></Navbar>
@@ -102,64 +114,76 @@ const Item = () => {
                 <TableBody>
                   {sorting.data ? (
                     history.length > 0 ? (
-                      history.map((historys, key) => {
-                        const { id, jumlah, tanggal } = historys;
-                        return (
-                          <StyledTableRow key={id}>
-                            <StyledTableCell>{key + 1}</StyledTableCell>
-                            <StyledTableCell>
-                              {historys.user.name}
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              {historys.item.name}
-                            </StyledTableCell>
-                            <StyledTableCell>{historys.jumlah}</StyledTableCell>
-                            <StyledTableCell>
-                              {historys.tanggal}
-                            </StyledTableCell>
-                          </StyledTableRow>
-                        );
-                      })
+                      history
+                        .slice(
+                          page * rowsPerPage,
+                          page * rowsPerPage + rowsPerPage
+                        )
+                        .map((historys, key) => {
+                          const { id, jumlah, tanggal } = historys;
+                          return (
+                            <StyledTableRow key={id}>
+                              <StyledTableCell>{key + 1}</StyledTableCell>
+                              <StyledTableCell>
+                                {historys.user.name}
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                {historys.item.name}
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                {historys.jumlah}
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                {historys.tanggal}
+                              </StyledTableCell>
+                            </StyledTableRow>
+                          );
+                        })
                     ) : (
                       <LoadingBar />
                     )
                   ) : item.length > 0 ? (
-                    item.map((items, key) => {
-                      console.log(items);
-                      const {
-                        id,
-                        name,
-                        harga,
-                        gambar,
-                        deskripsi,
-                        tanggal,
-                        stok,
-                        userId,
-                        brandId,
-                      } = items;
-                      return (
-                        <StyledTableRow key={id}>
-                          <StyledTableCell>{key + 1}</StyledTableCell>
-                          <StyledTableCell>{name}</StyledTableCell>
-                          <StyledTableCell>
-                            Rp.
-                            {new Intl.NumberFormat("de-DE", {
-                              prefix: "Rp",
-                              centsLimit: 0,
-                              thousandsSeparator: ".",
-                            }).format(harga)}
-                          </StyledTableCell>
-                          <StyledTableCell>{deskripsi}</StyledTableCell>
-                          <StyledTableCell>{tanggal}</StyledTableCell>
-                          <StyledTableCell>{stok}</StyledTableCell>
-                          <StyledTableCell>
-                            {userId ? items.user.name : " - "}
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            {brandId ? items.brand.name : " - "}
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            {/* {listWarna.map((data, i) => {
+                    item
+                      .slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                      .map((items, key) => {
+                        console.log(items);
+                        const {
+                          id,
+                          name,
+                          harga,
+                          gambar,
+                          deskripsi,
+                          tanggal,
+                          stok,
+                          userId,
+                          brandId,
+                        } = items;
+                        return (
+                          <StyledTableRow key={id}>
+                            <StyledTableCell>{key + 1}</StyledTableCell>
+                            <StyledTableCell>{name}</StyledTableCell>
+                            <StyledTableCell>
+                              Rp.
+                              {new Intl.NumberFormat("de-DE", {
+                                prefix: "Rp",
+                                centsLimit: 0,
+                                thousandsSeparator: ".",
+                              }).format(harga)}
+                            </StyledTableCell>
+                            <StyledTableCell>{deskripsi}</StyledTableCell>
+                            <StyledTableCell>{tanggal}</StyledTableCell>
+                            <StyledTableCell>{stok}</StyledTableCell>
+                            <StyledTableCell>
+                              {userId ? items.user.name : " - "}
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              {brandId ? items.brand.name : " - "}
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              {/* {listWarna.map((data, i) => {
                             const { itemId } = data;
                             if (id === itemId) {
                               return (
@@ -178,34 +202,36 @@ const Item = () => {
                               );
                             }
                           })} */}
-                            {/* <Stack direction="row" spacing={1} maxRow="3"> */}
-                            <Grid
-                              sx={{ flexGrow: 2 }}
-                              container
-                              spacing={1}
-                              px={2}
-                            >
-                              {listWarna.map((data, i) => {
-                                const { itemId } = data;
-                                if (id === itemId) {
-                                  return (
-                                    <Chip
-                                      label={data.warna.nama_warna}
-                                      variant="outlined"
-                                      style={{
-                                        // backgroundColor: data.warna.nama_warna,
-                                        borderColor: "black",
-                                      }}
-                                    ></Chip>
-                                    // <option>
-                                    //   <p>{data.warna.nama_warna}</p>
-                                    // </option>
-                                  );
-                                }
-                              })}
-                            </Grid>
-                            {/* </Stack> */}
-                            {/* <select>
+                              {/* <Stack direction="row" spacing={1} maxRow="3"> */}
+                              <Box sx={{ width: "100%" }}>
+                                <Grid
+                                  sx={{ flexGrow: 2 }}
+                                  container
+                                  spacing={1}
+                                  px={2}
+                                >
+                                  {listWarna.map((data, i) => {
+                                    const { itemId } = data;
+                                    if (id === itemId) {
+                                      return (
+                                        <Chip
+                                          label={data.warna.nama_warna}
+                                          variant="outlined"
+                                          style={{
+                                            // backgroundColor: data.warna.nama_warna,
+                                            borderColor: "black",
+                                          }}
+                                        ></Chip>
+                                        // <option>
+                                        //   <p>{data.warna.nama_warna}</p>
+                                        // </option>
+                                      );
+                                    }
+                                  })}
+                                </Grid>
+                              </Box>
+                              {/* </Stack> */}
+                              {/* <select>
                               {listWarna.map((data, i) => {
                                 const { itemId } = data;
                                 // <option>
@@ -213,69 +239,78 @@ const Item = () => {
                                 // </option>
                               })}
                             </select> */}
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            <img
-                              alt="gambar"
-                              src={gambar ? API_img + gambar : ""}
-                              className="img-thumbnail"
-                              width={gambar ? "100" : 0}
-                              height={gambar ? "100" : 0}
-                            />
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            <div
-                              style={{
-                                paddingRight: "10px",
-                                paddingBottom: "10px",
-                              }}
-                            >
-                              <Link
-                                to={`/item/edit/${id}`}
-                                className="btn btn-sm btn-primary"
-                                style={{ width: "100px" }}
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <img
+                                alt="gambar"
+                                src={gambar ? API_img + gambar : ""}
+                                className="img-thumbnail"
+                                width={gambar ? "100" : 0}
+                                height={gambar ? "100" : 0}
+                              />
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <div
+                                style={{
+                                  paddingRight: "10px",
+                                  paddingBottom: "10px",
+                                }}
                               >
-                                Edit
-                              </Link>
-                            </div>
-                            <div
-                              style={{
-                                paddingRight: "10px",
-                                paddingBottom: "10px",
-                              }}
-                            >
-                              <Link
-                                to={`/item/add/${id}`}
-                                className="btn btn-sm btn-success"
-                                style={{ width: "100px" }}
+                                <Link
+                                  to={`/item/edit/${id}`}
+                                  className="btn btn-sm btn-primary"
+                                  style={{ width: "100px" }}
+                                >
+                                  Edit
+                                </Link>
+                              </div>
+                              <div
+                                style={{
+                                  paddingRight: "10px",
+                                  paddingBottom: "10px",
+                                }}
                               >
-                                Tambah
-                              </Link>
-                            </div>
-                            <div
-                              style={{
-                                paddingRight: "10px",
-                                paddingBottom: "10px",
-                              }}
-                            >
-                              <button
-                                onClick={() => deleteHandler(+id)}
-                                className="btn btn-sm btn-danger"
-                                style={{ width: "100px" }}
+                                <Link
+                                  to={`/item/add/${id}`}
+                                  className="btn btn-sm btn-success"
+                                  style={{ width: "100px" }}
+                                >
+                                  Tambah
+                                </Link>
+                              </div>
+                              <div
+                                style={{
+                                  paddingRight: "10px",
+                                  paddingBottom: "10px",
+                                }}
                               >
-                                Delete
-                              </button>
-                            </div>
-                          </StyledTableCell>
-                        </StyledTableRow>
-                      );
-                    })
+                                <button
+                                  onClick={() => deleteHandler(+id)}
+                                  className="btn btn-sm btn-danger"
+                                  style={{ width: "100px" }}
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            </StyledTableCell>
+                          </StyledTableRow>
+                        );
+                      })
                   ) : (
                     <LoadingBar />
                   )}
                 </TableBody>
               </Table>
             </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={item.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
           </div>
         </div>
       </div>
