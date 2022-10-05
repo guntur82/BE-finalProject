@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react";
-import Navbar from "../../components/Navbar";
-import LoadingBar from "../../helpers/LoadingBar";
-import { Link } from "react-router-dom";
-import { FiBold, FiPlusSquare } from "react-icons/fi";
-import { deleteWarna, getWarna } from "../../axios/warnaAxios";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import TablePagination from "@mui/material/TablePagination";
-import { styled } from "@mui/material/styles";
+import React, { useState, useEffect } from 'react';
+import Navbar from '../../components/Navbar';
+import LoadingBar from '../../helpers/LoadingBar';
+import { Link } from 'react-router-dom';
+import { FiBold, FiPlusSquare } from 'react-icons/fi';
+import { deleteWarna, getWarna } from '../../axios/warnaAxios';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import TablePagination from '@mui/material/TablePagination';
+import { styled } from '@mui/material/styles';
 
 const Warna = () => {
   const [warna, setWarna] = useState([]);
@@ -26,21 +26,21 @@ const Warna = () => {
   };
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: "#bfd1ec",
+      backgroundColor: '#bfd1ec',
       fontSize: 20,
       color: theme.palette.common.black,
-      fontStyle: "bold",
+      fontStyle: 'bold',
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
     },
   }));
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    "&:nth-of-type(odd)": {
+    '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.action.hover,
     },
     // hide last border
-    "&:last-child td, &:last-child th": {
+    '&:last-child td, &:last-child th': {
       border: 0,
     },
   }));
@@ -94,7 +94,9 @@ const Warna = () => {
                         const { id, nama_warna } = warnas;
                         return (
                           <StyledTableRow key={id}>
-                            <TableCell align="center">{key + 1}</TableCell>
+                            <TableCell align="center">
+                              {key + 1 + page * 5}
+                            </TableCell>
                             <TableCell>
                               <div className="pallete" align="center">
                                 <div className="kotak">
@@ -102,7 +104,7 @@ const Warna = () => {
                                     className="box"
                                     style={{
                                       backgroundColor: nama_warna,
-                                      borderColor: "black",
+                                      borderColor: 'black',
                                     }}
                                   >
                                     <p>{nama_warna}</p>
@@ -113,25 +115,25 @@ const Warna = () => {
                             <TableCell align="center">
                               <div
                                 style={{
-                                  paddingRight: "10px",
-                                  paddingRight: "10px",
-                                  paddingRight: "10px",
-                                  paddingBottom: "10px",
+                                  paddingRight: '10px',
+                                  paddingRight: '10px',
+                                  paddingRight: '10px',
+                                  paddingBottom: '10px',
                                 }}
                               >
                                 <Link
                                   to={`/warna/edit/${id}`}
                                   className="btn btn-sm btn-primary"
-                                  style={{ width: "100px" }}
+                                  style={{ width: '100px' }}
                                 >
                                   Edit
                                 </Link>
                               </div>
-                              <div style={{ paddingRight: "10px" }}>
+                              <div style={{ paddingRight: '10px' }}>
                                 <button
                                   onClick={() => deleteHandler(+id)}
                                   className="btn btn-sm btn-danger"
-                                  style={{ width: "100px" }}
+                                  style={{ width: '100px' }}
                                 >
                                   Delete
                                 </button>

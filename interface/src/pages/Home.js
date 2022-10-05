@@ -87,7 +87,9 @@ const Home = () => {
                 <TableHead>
                   <StyledTableRow>
                     <StyledTableCell align="center">No.</StyledTableCell>
-                    <StyledTableCell align="center">Nama Pelanggan</StyledTableCell>
+                    <StyledTableCell align="center">
+                      Nama Pelanggan
+                    </StyledTableCell>
                     <StyledTableCell align="center">
                       Nama Barang
                     </StyledTableCell>
@@ -118,7 +120,7 @@ const Home = () => {
                           return (
                             <StyledTableRow key={id}>
                               <StyledTableCell align="center">
-                                {key + 1}
+                                {key + 1 + page * 5}
                               </StyledTableCell>
                               <StyledTableCell align="center">
                                 {carts.user.name}

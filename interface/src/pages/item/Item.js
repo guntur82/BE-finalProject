@@ -164,7 +164,9 @@ const Item = () => {
                         console.log(items);
                         return (
                           <StyledTableRow key={id}>
-                            <StyledTableCell>{key + 1}</StyledTableCell>
+                            <StyledTableCell>
+                              {key + 1 + page * 5}
+                            </StyledTableCell>
                             <StyledTableCell>{name}</StyledTableCell>
                             <StyledTableCell>
                               Rp.

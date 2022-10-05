@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from "react";
-import Navbar from "../../components/Navbar";
-import LoadingBar from "../../helpers/LoadingBar";
-import { Link } from "react-router-dom";
-import { FiPlusSquare } from "react-icons/fi";
-import { deleteUser, getUsers } from "../../axios/userAxios";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import { styled } from "@mui/material/styles";
-import TablePagination from "@mui/material/TablePagination";
+import React, { useState, useEffect } from 'react';
+import Navbar from '../../components/Navbar';
+import LoadingBar from '../../helpers/LoadingBar';
+import { Link } from 'react-router-dom';
+import { FiPlusSquare } from 'react-icons/fi';
+import { deleteUser, getUsers } from '../../axios/userAxios';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { styled } from '@mui/material/styles';
+import TablePagination from '@mui/material/TablePagination';
 
 const User = () => {
-  const API_img = "http://localhost:3000/uploads/";
+  const API_img = 'http://localhost:3000/uploads/';
   const [user, setUser] = useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -28,20 +28,20 @@ const User = () => {
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       fontSize: 20,
-      backgroundColor: "#bfd1ec",
+      backgroundColor: '#bfd1ec',
       color: theme.palette.common.black,
-      fontStyle: "bold",
+      fontStyle: 'bold',
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
     },
   }));
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    "&:nth-of-type(odd)": {
+    '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.action.hover,
     },
     // hide last border
-    "&:last-child td, &:last-child th": {
+    '&:last-child td, &:last-child th': {
       border: 0,
     },
   }));
@@ -103,7 +103,9 @@ const User = () => {
                         } = users;
                         return (
                           <StyledTableRow key={id}>
-                            <TableCell align="center">{key + 1}</TableCell>
+                            <TableCell align="center">
+                              {key + 1 + page * 5}
+                            </TableCell>
                             <TableCell align="center">{email}</TableCell>
                             <TableCell align="center">{name}</TableCell>
                             <TableCell align="center">{no_hp}</TableCell>
@@ -112,32 +114,32 @@ const User = () => {
                             <TableCell align="center">
                               <img
                                 alt="gambar"
-                                src={gambar ? API_img + gambar : ""}
+                                src={gambar ? API_img + gambar : ''}
                                 className="img-thumbnail"
-                                width={gambar ? "100" : 0}
-                                height={gambar ? "100" : 0}
+                                width={gambar ? '100' : 0}
+                                height={gambar ? '100' : 0}
                               />
                             </TableCell>
                             <TableCell align="center">
                               <div
                                 style={{
-                                  paddingRight: "10px",
-                                  paddingBottom: "10px",
+                                  paddingRight: '10px',
+                                  paddingBottom: '10px',
                                 }}
                               >
                                 <Link
                                   to={`/user/edit/${id}`}
                                   className="btn btn-sm btn-primary"
-                                  style={{ width: "100px" }}
+                                  style={{ width: '100px' }}
                                 >
                                   Edit
                                 </Link>
                               </div>
-                              <div style={{ paddingRight: "10px" }}>
+                              <div style={{ paddingRight: '10px' }}>
                                 <button
                                   onClick={() => deleteHandler(+id)}
                                   className="btn btn-sm btn-danger"
-                                  style={{ width: "100px" }}
+                                  style={{ width: '100px' }}
                                 >
                                   Delete
                                 </button>
