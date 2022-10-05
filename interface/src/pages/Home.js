@@ -87,7 +87,7 @@ const Home = () => {
                 <TableHead>
                   <StyledTableRow>
                     <StyledTableCell align="center">No.</StyledTableCell>
-                    <StyledTableCell align="center">Nama User</StyledTableCell>
+                    <StyledTableCell align="center">Nama Pelanggan</StyledTableCell>
                     <StyledTableCell align="center">
                       Nama Barang
                     </StyledTableCell>
