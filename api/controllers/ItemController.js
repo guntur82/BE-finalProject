@@ -1,5 +1,7 @@
 const { item, brand, user, kodeWarna, historyItem } = require('../models');
 const fs = require('fs');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 class ItemController {
   static async getData(req, res) {
     try {
@@ -197,6 +199,22 @@ class ItemController {
           res.status(404).json({
             message: `not found`,
           });
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
+
+  static async searchItem(req, res) {
+    try {
+      let search = req.params.search;
+      let result = await item.findAll({
+        where: {
+          name: { [Sequelize.Op.iLike]: '%' + search + '%' },
+        },
+        include: [brand, user],
+        order: [['id', 'asc']],
+      });
+      res.status(200).json(result);
     } catch (error) {
       res.status(500).json(error);
     }
