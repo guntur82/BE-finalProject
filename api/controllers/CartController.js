@@ -33,9 +33,12 @@ class CartController {
       let ratting = 0;
       let status_pengiriman = 0;
       let userId = req.userData.id;
+      // console.log(userId);
+      // console.log(req.body);
       const dataExist = await cart.findOne({
         where: { userId, itemId, status_barang: 0 },
       });
+      // console.log(dataExist !== null);
       if (dataExist !== null) {
         let result = await cart.update(
           {
@@ -46,7 +49,7 @@ class CartController {
           }
         );
         res.status(201).json({
-          message: `add`,
+          msg: `add`,
         });
       } else {
         let result = await cart.create({
@@ -59,8 +62,13 @@ class CartController {
           userId,
         });
         res.status(201).json({
-          message: `success`,
+          msg: `success`,
         });
+        // res.status(201).json(
+        //   {
+        //     message: `success`,
+        //   },
+        // );
       }
     } catch (error) {
       res.status(500).json(error);
@@ -206,6 +214,19 @@ class CartController {
         include: [item, user],
         order: [['id', 'asc']],
         where: { userId },
+      });
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
+
+  static async listCart(req, res) {
+    try {
+      // untuk nyari itemnya di looping aja
+      let userId = req.userData.id;
+      const result = await cart.findAll({
+        where: { userId, status_barang: 0, status_pengiriman: 0 },
       });
       res.status(200).json(result);
     } catch (error) {

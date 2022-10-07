@@ -5,6 +5,7 @@ const { auth } = require('../middleware/auth');
 cartRoutes.get('/', CartController.getData);
 cartRoutes.get('/info/', auth, CartController.getInformation);
 cartRoutes.post('/', auth, CartController.create);
+cartRoutes.get('/list', auth, CartController.listCart);
 cartRoutes.put('/', auth, CartController.update); //post diganti put
 cartRoutes.put('/update/:id', CartController.updateAdmin); //post diganti put
 cartRoutes.delete('/', auth, CartController.delete); //get di ganti delete
