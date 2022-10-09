@@ -4,6 +4,7 @@ const { auth } = require('../middleware/auth');
 // kondisi pembeli hanya user
 cartRoutes.get('/', CartController.getData);
 cartRoutes.get('/info/', auth, CartController.getInformation);
+cartRoutes.post('/decreaseCart', auth, CartController.decreaseCart);
 cartRoutes.post('/', auth, CartController.create);
 cartRoutes.get('/list', auth, CartController.listCart);
 cartRoutes.put('/', auth, CartController.update); //post diganti put

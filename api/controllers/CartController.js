@@ -74,6 +74,43 @@ class CartController {
       res.status(500).json(error);
     }
   }
+  static async decreaseCart(req, res) {
+    try {
+      const { jumlah, itemId } = req.body;
+      let userId = req.userData.id;
+      let jumlah_cart = +jumlah;
+      const dataExist = await cart.findOne({
+        where: { userId, itemId, status_barang: 0 },
+      });
+      // console.log(dataExist !== null);
+      if (dataExist.jumlah === 1) {
+        let result = await cart.destroy({
+          where: { userId, itemId },
+        });
+        res.status(201).json({
+          msg: `remove`,
+        });
+      } else if (dataExist !== null) {
+        let result = await cart.update(
+          {
+            jumlah: dataExist.jumlah - jumlah_cart,
+          },
+          {
+            where: { userId, itemId },
+          }
+        );
+        res.status(201).json({
+          msg: `decrease`,
+        });
+      } else {
+        res.status(201).json({
+          msg: `no data`,
+        });
+      }
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
   static async update(req, res) {
     try {
       let userId = req.userData.id;
@@ -226,6 +263,7 @@ class CartController {
       // untuk nyari itemnya di looping aja
       let userId = req.userData.id;
       const result = await cart.findAll({
+        order: [['id', 'asc']],
         where: { userId, status_barang: 0, status_pengiriman: 0 },
       });
       res.status(200).json(result);
