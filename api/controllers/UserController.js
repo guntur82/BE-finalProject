@@ -54,7 +54,7 @@ class UserController {
           });
           // verifytoken belum dipake
           let verifyToken = tokenVerifier(access_token);
-          console.log(verifyToken);
+          // console.log(verifyToken);
         } else {
           res.status(403).json({ msg: `Invalid password` });
         }
@@ -142,6 +142,66 @@ class UserController {
           res.status(404).json({
             message: `User id ${id} not found`,
           });
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
+  static async updateUserDetail(req, res) {
+    try {
+      const { id, email, name, password, no_hp, level, alamat } = req.body;
+      let dataExist = await user.findOne({ where: +id });
+      let existPassword = '';
+      password === 'kosong'
+        ? (existPassword = dataExist.password)
+        : (existPassword = encryptPass(password));
+      // let gambar = '';
+      // if (req.file) {
+      //   gambar = req.file.filename;
+      //   if (
+      //     fs.existsSync(`${__dirname}/../public/uploads/${dataExist.gambar}`)
+      //   ) {
+      //     fs.unlink(
+      //       `${__dirname}/../public/uploads/${dataExist.gambar}`,
+      //       () => {
+      //         console.log('file has been deleted');
+      //       }
+      //     );
+      //   }
+      // } else {
+      //   gambar = dataExist.gambar;
+      // }
+      let result = await user.update(
+        {
+          email,
+          name,
+          password: existPassword,
+          // gambar,
+          no_hp,
+          level,
+          alamat,
+        },
+        {
+          where: { id },
+          individualHooks: true,
+        }
+      );
+      let access_token = '';
+      if (result[0] === 1) {
+        let newData = await user.findByPk(id);
+        access_token = tokenGenerator(newData);
+        res.status(200).json({
+          access_token,
+          ...newData.dataValues,
+          id: String(newData.id),
+        });
+        // res.status(200).json({
+        //   message: `success`,
+        // });
+      } else {
+        res.status(404).json({
+          message: `User id ${id} not found`,
+        });
+      }
     } catch (error) {
       res.status(500).json(error);
     }

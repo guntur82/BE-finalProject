@@ -60,7 +60,6 @@ class WishlistController {
         order: [['id', 'asc']],
         where: { userId },
       });
-      console.log(result[0].item.name);
       res.status(200).json(result);
     } catch (error) {
       res.status(500).json(error);
