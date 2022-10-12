@@ -60,8 +60,22 @@ class WishlistController {
         order: [['id', 'asc']],
         where: { userId },
       });
-      console.log(userId);
+      console.log(result[0].item.name);
       res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
+  static async getDetail(req, res) {
+    try {
+      let userId = req.userData.id;
+      const { itemId } = req.body;
+      let result = await wishList.findOne({
+        include: [item, user],
+        order: [['id', 'asc']],
+        where: { userId, itemId },
+      });
+      res.status(200).json(result ? true : false);
     } catch (error) {
       res.status(500).json(error);
     }
