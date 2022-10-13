@@ -33,12 +33,9 @@ class CartController {
       let ratting = 0;
       let status_pengiriman = 0;
       let userId = req.userData.id;
-      // console.log(userId);
-      // console.log(req.body);
       const dataExist = await cart.findOne({
         where: { userId, itemId, status_barang: 0 },
       });
-      // console.log(dataExist !== null);
       if (dataExist !== null) {
         let result = await cart.update(
           {
@@ -82,7 +79,6 @@ class CartController {
       const dataExist = await cart.findOne({
         where: { userId, itemId, status_barang: 0 },
       });
-      // console.log(dataExist !== null);
       if (dataExist.jumlah === 1) {
         let result = await cart.destroy({
           where: { userId, itemId },
@@ -123,28 +119,33 @@ class CartController {
       while (req.body[`itemId.${i}`]) {
         const { ratting, status_barang, tanggal } = req.body;
         let itemId = req.body[`itemId.${i}`];
-        const dataExist = await cart.findAll({
+        const dataExist = await cart.findOne({
           where: { userId, itemId, status_barang: 0, status_pengiriman: 0 },
         });
         // kalo mau beli barang yang di cart dengan status sb = 0, sp = 0
         if (dataExist) {
-          result = await cart.update(
-            {
-              tanggal,
-              status_barang,
-            },
-            {
-              where: { userId, itemId },
-            }
-          );
-          // result[0] === 1
-          //   ? res.status(200).json({
-          //       message: `success barang`,
-          //     })
-          //   : // 404 not found
-          //     res.status(404).json({
-          //       message: `not found`,
-          //     });
+          const dataExistItem = await item.findByPk(itemId);
+          if (dataExistItem.stok >= dataExist.jumlah) {
+            let resultItem = await item.update(
+              {
+                stok: dataExistItem.stok - dataExist.jumlah,
+              },
+              {
+                where: { id: itemId },
+              }
+            );
+            result = await cart.update(
+              {
+                tanggal,
+                status_barang,
+              },
+              {
+                where: { userId, itemId },
+              }
+            );
+          } else {
+            res.status(400).json({ message: `stok yang dimiliki kurang!` });
+          }
         } else {
           // kasih rating kalo barang sudah sampai dengan status sb = 0, sp = 1
           result = await cart.update(
@@ -156,25 +157,20 @@ class CartController {
               where: { userId, itemId },
             }
           );
-          // result[0] === 1
-          //   ? res.status(200).json({
-          //       message: `success rating`,
-          //     })
-          //   : // 404 not found
-          //     res.status(404).json({
-          //       message: `not found`,
-          //     });
         }
         i++;
       }
-      result[0] === 1
-        ? res.status(200).json({
-            message: `success`,
-          })
-        : // 404 not found
-          res.status(404).json({
-            message: `not found`,
-          });
+      res.status(200).json({
+        message: `success`,
+      });
+      // result[0] === 1
+      //   ? res.status(200).json({
+      //       message: `success`,
+      //     })
+      //   : // 404 not found
+      //     res.status(404).json({
+      //       message: `not found`,
+      //     });
     } catch (error) {
       res.status(500).json(error);
     }
