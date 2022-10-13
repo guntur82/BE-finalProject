@@ -1,38 +1,49 @@
-import React, { useEffect, useState } from "react";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
-import { dataUser, registerUser, updateUser } from "../../axios/userAxios";
-import { useNavigate, useParams, Link } from "react-router-dom";
-import Swal from "sweetalert2";
-import { FiX } from "react-icons/fi";
-import TextField from "@mui/material/TextField";
-import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
+import React, { useEffect, useState } from 'react';
+import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
+import {
+  dataUser,
+  detailUser,
+  registerUser,
+  updateUser,
+  updateUserDetail,
+} from '../../axios/userAxios';
+import { useNavigate, useParams, Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import { FiX } from 'react-icons/fi';
+import TextField from '@mui/material/TextField';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 
 const Profile = () => {
+  const API_img = 'http://localhost:3000/uploads/';
   const navigation = useNavigate();
   const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-    password2nd: "",
-    no_hp: "",
-    gambar: "",
-    level: "",
-    alamat: "",
+    id: '',
+    name: '',
+    email: '',
+    password: '',
+    password2nd: '',
+    no_hp: '',
+    gambar: '',
+    alamat: '',
   });
-  const params = useParams();
-  const { id } = params;
+  const [data, setData] = useState({
+    token: localStorage.getItem('access_token'),
+  });
   useEffect(() => {
-    if (id) {
-      dataUser(+id, (result) => {
+    if (data.token) {
+      detailUser(data, (result) => {
         setForm({
-          name: result.name ?? "",
-          email: result.email ?? "",
-          no_hp: result.no_hp ?? "",
-          level: result.level ?? "",
-          alamat: result.alamat ?? "",
+          id: result.id,
+          name: result.name,
+          email: result.email,
+          no_hp: result.no_hp,
+          level: result.level,
+          gambar: result.gambar,
+          alamat: result.alamat,
         });
+        setImg({ preview: API_img + result.gambar });
       });
     }
   }, []);
@@ -48,49 +59,31 @@ const Profile = () => {
 
   const submitHandler = () => {
     // buat redirect
+    console.log(form);
     if (isValidEmail(form.email)) {
       if (form.password === form.password2nd) {
-        id
-          ? updateUser(id, form, (result) => {
-              if (result.data.message === "success") {
-                Swal.fire("Success", "Pembaharuan berhasil", "success").then(
-                  () => {
-                    navigation("/user");
-                  }
-                );
-              } else {
-                console.log(result);
-              }
-            })
-          : registerUser(form, (result) => {
-              if (result.data.name) {
-                Swal.fire("Success", "Berhasil membuat akun", "success").then(
-                  () => {
-                    navigation("/user");
-                  }
-                );
-              } else if (result.data === "email") {
-                Swal.fire({
-                  icon: "error",
-                  title: "Oops...",
-                  text: "Email sudah digunakan!",
-                });
-              } else {
-                console.log(result);
-              }
+        updateUserDetail(form.id, form, (result) => {
+          if (result.data.msg === 'success') {
+            localStorage.setItem('access_token', result.data.access_token);
+            Swal.fire('Success', 'Pembaharuan berhasil', 'success').then(() => {
+              navigation('/');
             });
+          } else {
+            console.log(result);
+          }
+        });
       } else {
         Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Password tidak sama",
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Password tidak sama',
         });
       }
     } else {
       Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Pastikan email anda benar",
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Pastikan email anda benar',
       });
     }
   };
@@ -102,12 +95,17 @@ const Profile = () => {
           <div className="col-sm-3">
             <div className="text-center">
               <img
-                src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png"
+                src={
+                  img
+                    ? img.preview
+                    : 'http://ssl.gstatic.com/accounts/ui/avatar_2x.png'
+                }
                 className="avatar img-circle img-thumbnail"
                 alt="avatar"
               />
               <h6>Upload a different photo...</h6>
               <input
+                onChange={onImageChange}
                 type="file"
                 className="text-center center-block file-upload"
               />
@@ -124,24 +122,19 @@ const Profile = () => {
                   </div>
                 </div>
                 <hr />
-                <form
-                  className="form"
-                  action="##"
-                  method="post"
-                  id="registrationForm"
-                >
-                  <div className="mb-3">
-                    <TextField
-                      className="form-control"
-                      required
-                      id="outlined-password-input"
-                      label="Email"
-                      type="email"
-                      onChange={(e) =>
-                        setForm({ ...form, email: e.target.value })
-                      }
-                    />
-                    {/* <input
+                <div className="mb-3">
+                  <TextField
+                    className="form-control"
+                    required
+                    id="outlined-email-input"
+                    label="Email"
+                    type="email"
+                    onChange={(e) =>
+                      setForm({ ...form, email: e.target.value })
+                    }
+                    value={form.email}
+                  />
+                  {/* <input
                     type="text"
                     className="form-control"
                     onChange={(e) =>
@@ -150,39 +143,37 @@ const Profile = () => {
                     value={form.email}
                     placeholder="Email..."
                   /> */}
-                  </div>
-                  <div className="mb-3">
-                    <TextField
-                      className="form-control"
-                      required
-                      id="outlined-password-input"
-                      label="Name"
-                      type="text"
-                      onChange={(e) =>
-                        setForm({ ...form, name: e.target.value })
-                      }
-                      value={form.name}
-                    />
-                    {/* <input
+                </div>
+                <div className="mb-3">
+                  <TextField
+                    className="form-control"
+                    required
+                    id="outlined-name-input"
+                    label="Name"
+                    type="text"
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    value={form.name}
+                  />
+                  {/* <input
                     type="text"
                     className="form-control"
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     value={form.name}
                     placeholder="Name..."
                   /> */}
-                  </div>
-                  <div className="mb-3">
-                    <TextField
-                      className="form-control"
-                      required
-                      id="outlined-password-input"
-                      label="Password"
-                      type="password"
-                      onChange={(e) =>
-                        setForm({ ...form, password: e.target.value })
-                      }
-                    />
-                    {/* <input
+                </div>
+                <div className="mb-3">
+                  <TextField
+                    className="form-control"
+                    required
+                    id="outlined-password-input"
+                    label="Password"
+                    type="password"
+                    onChange={(e) =>
+                      setForm({ ...form, password: e.target.value })
+                    }
+                  />
+                  {/* <input
                     type="password"
                     className="form-control"
                     onChange={(e) =>
@@ -190,19 +181,19 @@ const Profile = () => {
                     }
                     placeholder="Password..."
                   /> */}
-                  </div>
-                  <div className="mb-3">
-                    <TextField
-                      className="form-control"
-                      required
-                      id="outlined-password-input"
-                      label="Confirm Password"
-                      type="password"
-                      onChange={(e) =>
-                        setForm({ ...form, password2nd: e.target.value })
-                      }
-                    />
-                    {/* <input
+                </div>
+                <div className="mb-3">
+                  <TextField
+                    className="form-control"
+                    required
+                    id="outlined-password2nd-input"
+                    label="Confirm Password"
+                    type="password"
+                    onChange={(e) =>
+                      setForm({ ...form, password2nd: e.target.value })
+                    }
+                  />
+                  {/* <input
                     type="password"
                     className="form-control"
                     onChange={(e) =>
@@ -210,25 +201,25 @@ const Profile = () => {
                     }
                     placeholder="Confirm Password..."
                   /> */}
-                  </div>
-                  <div className="mb-3">
-                    <TextField
-                      className="form-control"
-                      required
-                      id="outlined-password-input"
-                      label="Phone"
-                      type="number"
-                      onKeyPress={(event) => {
-                        if (!/[0-9]/.test(event.key)) {
-                          event.preventDefault();
-                        }
-                      }}
-                      onChange={(e) =>
-                        setForm({ ...form, no_hp: e.target.value })
+                </div>
+                <div className="mb-3">
+                  <TextField
+                    className="form-control"
+                    required
+                    id="outlined-no_hp-input"
+                    label="Phone"
+                    type="number"
+                    onKeyPress={(event) => {
+                      if (!/[0-9]/.test(event.key)) {
+                        event.preventDefault();
                       }
-                      value={form.no_hp}
-                    />
-                    {/* <input
+                    }}
+                    onChange={(e) =>
+                      setForm({ ...form, no_hp: e.target.value })
+                    }
+                    value={form.no_hp}
+                  />
+                  {/* <input
                     type="text"
                     className="form-control"
                     onKeyPress={(event) => {
@@ -242,17 +233,21 @@ const Profile = () => {
                     value={form.no_hp}
                     placeholder="Phone..."
                   /> */}
-                  </div>
-                  <div className="mb-3">
-                    <TextField
-                      required
-                      className="form-control"
-                      id="outlined-multiline-static"
-                      label="Alamat"
-                      multiline
-                      rows={4}
-                    />
-                    {/* <textarea
+                </div>
+                <div className="mb-3">
+                  <TextField
+                    required
+                    className="form-control"
+                    id="outlined-multiline-static"
+                    label="Alamat"
+                    multiline
+                    rows={4}
+                    onChange={(e) =>
+                      setForm({ ...form, alamat: e.target.value })
+                    }
+                    value={form.alamat}
+                  />
+                  {/* <textarea
                     type="text"
                     className="form-control"
                     onChange={(e) =>
@@ -261,16 +256,19 @@ const Profile = () => {
                     value={form.alamat}
                     placeholder="Alamat..."
                   /> */}
-                  </div>
-                  <Stack direction="row" spacing={2}>
-                    <Button variant="contained" color="success">
-                      Save
-                    </Button>
-                    <Button variant="outlined" color="error">
-                      Reset
-                    </Button>
-                  </Stack>
-                </form>
+                </div>
+                <Stack direction="row" spacing={2}>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    onClick={() => submitHandler()}
+                  >
+                    Save
+                  </Button>
+                  <Button variant="outlined" color="error">
+                    Reset
+                  </Button>
+                </Stack>
               </div>
             </div>
           </div>

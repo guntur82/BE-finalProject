@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from "react";
-import Navbar from "../../components/Navbar";
-import "../../App.css";
-import moment from "moment";
-import { useNavigate, useParams } from "react-router-dom";
-import Swal from "sweetalert2";
-import { addItemStock, informationItem } from "../../axios/itemAxios";
-import TextField from "@mui/material/TextField";
+import React, { useEffect, useState } from 'react';
+import Navbar from '../../components/Navbar';
+import '../../App.css';
+import moment from 'moment';
+import { useNavigate, useParams } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import { addItemStock, informationItem } from '../../axios/itemAxios';
+import TextField from '@mui/material/TextField';
 
 const AddItem = () => {
   const navigate = useNavigate();
   const params = useParams();
   const [form, setForm] = useState({
-    id: "",
-    name: "",
-    tanggal: "",
-    stok: "",
+    id: '',
+    name: '',
+    tanggal: '',
+    stok: '',
   });
 
   const { id } = params;
@@ -24,7 +24,7 @@ const AddItem = () => {
         id: result.id,
         stok: result.stok,
         name: result.name,
-        tanggal: moment().format("YYYY-MM-DD h:mm:ss"),
+        tanggal: moment().format('YYYY-MM-DD h:mm:ss'),
       });
     });
   }, []);
@@ -32,9 +32,9 @@ const AddItem = () => {
   const submitHandler = () => {
     // buat redirect
     addItemStock(form, localStorage.access_token, (result) => {
-      if (result.message === "success") {
-        Swal.fire("Success", "Tambah data berhasil", "success").then(() => {
-          navigate("/item");
+      if (result.message === 'success') {
+        Swal.fire('Success', 'Tambah data berhasil', 'success').then(() => {
+          navigate('/item');
         });
       } else {
         console.log(result);
@@ -84,9 +84,17 @@ const AddItem = () => {
                     required
                     id="outlined-password-input"
                     label="Stok"
-                    type="number"
-                    value={form.stok}
-                    disabled
+                    // type="number"
+                    // value={form.stok}
+                    type="text"
+                    onKeyPress={(event) => {
+                      if (!/[0-9]/.test(event.key)) {
+                        event.preventDefault();
+                      }
+                    }}
+                    onChange={(e) => setForm({ ...form, stok: e.target.value })}
+                    placeholder={`stok saat ini : ` + form.stok}
+                    // disabled
                   />
                   {/* <input
                     type="text"
@@ -96,7 +104,7 @@ const AddItem = () => {
                     disabled
                   /> */}
                 </div>
-                <div className="input-group mb-3">
+                {/* <div className="input-group mb-3">
                   <input
                     type="text"
                     onKeyPress={(event) => {
@@ -108,13 +116,13 @@ const AddItem = () => {
                     onChange={(e) => setForm({ ...form, stok: e.target.value })}
                     placeholder="Tambah Stok..."
                   />
-                </div>
+                </div> */}
                 <div className="text-center">
                   <button
                     onClick={() => submitHandler()}
                     className="btn btn-color px-5 mb-5 w-100"
                   >
-                    Register
+                    Tambah
                   </button>
                 </div>
               </div>

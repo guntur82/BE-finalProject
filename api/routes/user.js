@@ -15,6 +15,11 @@ userRoutes.post(
 userRoutes.post('/loginadmin', UserController.loginAdmin);
 userRoutes.post('/login', UserController.login);
 userRoutes.put('/:id', multer.single('gambar'), UserController.updateUser);
+userRoutes.put(
+  '/userDetail/:id',
+  multer.single('gambar'),
+  UserController.updateUserDetailWeb
+);
 userRoutes.delete('/:id', UserController.deleteUser);
 userRoutes.post('/account', UserController.getUser);
 userRoutes.get('/:id', UserController.detailUser);

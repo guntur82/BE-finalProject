@@ -1,4 +1,4 @@
-const { cart, item, user } = require('../models');
+const { cart, item, user, transaksi } = require('../models');
 
 class CartController {
   static async getData(req, res) {
@@ -134,6 +134,11 @@ class CartController {
                 where: { id: itemId },
               }
             );
+            let resultTransaksi = await transaksi.create({
+              tanggal,
+              totalHarga: dataExistItem.harga * dataExist.jumlah,
+              cartId: dataExist.id,
+            });
             result = await cart.update(
               {
                 tanggal,

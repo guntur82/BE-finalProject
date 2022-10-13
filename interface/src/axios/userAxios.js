@@ -68,6 +68,19 @@ const updateUser = async (id, data, cb) => {
     console.log(error);
   }
 };
+const updateUserDetail = async (id, data, cb) => {
+  try {
+    let result = await axios({
+      method: 'PUT',
+      url: URL + '/userDetail/' + id,
+      data: data,
+      headers: { 'content-type': 'multipart/form-data' },
+    });
+    cb(result);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const dataUser = async (id, cb) => {
   try {
@@ -94,4 +107,12 @@ const detailUser = async (form, cb) => {
   }
 };
 
-export { registerUser, detailUser, getUsers, deleteUser, dataUser, updateUser };
+export {
+  registerUser,
+  detailUser,
+  getUsers,
+  deleteUser,
+  dataUser,
+  updateUser,
+  updateUserDetail,
+};
