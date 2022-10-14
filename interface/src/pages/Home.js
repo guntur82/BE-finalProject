@@ -41,7 +41,9 @@ const Home = () => {
     status.status_pengiriman = 1;
     editCart(id, status, (result) => {
       if (result.data.message === 'success') {
-        Swal.fire('Success', 'Pembaharuan berhasil', 'success');
+        Swal.fire('Success', 'Pembaharuan berhasil', 'success').then(() => {
+          window.location.reload();
+        });
       } else {
         console.log(result);
       }

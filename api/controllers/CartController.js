@@ -16,7 +16,10 @@ class CartController {
     try {
       let result = await cart.findAll({
         include: [item, user],
-        order: [['id', 'asc']],
+        order: [
+          ['status_pengiriman', 'asc'],
+          ['id', 'asc'],
+        ],
         where: { status_barang: 1 },
       });
       res.status(200).json(result);
