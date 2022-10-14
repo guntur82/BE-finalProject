@@ -3,10 +3,13 @@ const { CartController } = require('../controllers');
 const { auth } = require('../middleware/auth');
 // kondisi pembeli hanya user
 cartRoutes.get('/', CartController.getData);
+cartRoutes.get('/all', CartController.getDataTransaksi);
+cartRoutes.get('/transaksi', CartController.getDataTransaksiUser);
 cartRoutes.get('/info/', auth, CartController.getInformation);
 cartRoutes.post('/decreaseCart', auth, CartController.decreaseCart);
 cartRoutes.post('/', auth, CartController.create);
 cartRoutes.get('/list', auth, CartController.listCart);
+cartRoutes.get('/listDone', auth, CartController.listCartTransaction);
 cartRoutes.put('/', auth, CartController.update); //post diganti put
 cartRoutes.put('/update/:id', CartController.updateAdmin); //post diganti put
 cartRoutes.delete('/', auth, CartController.delete); //get di ganti delete

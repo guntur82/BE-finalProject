@@ -12,6 +12,18 @@ class CartController {
       res.status(500).json(error);
     }
   }
+  static async getDataTransaksi(req, res) {
+    try {
+      let result = await cart.findAll({
+        include: [item, user],
+        order: [['id', 'asc']],
+        where: { status_barang: 1 },
+      });
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
 
   static async create(req, res) {
     try {
@@ -57,6 +69,21 @@ class CartController {
           status_pengiriman,
           itemId,
           userId,
+        });
+        const dataExistItem = await item.findByPk(result.itemId);
+        let resultItem = await item.update(
+          {
+            stok: dataExistItem.stok - result.jumlah,
+          },
+          {
+            where: { id: itemId },
+          }
+        );
+        let resultTransaksi = await transaksi.create({
+          kode_transaksi: kodeTransaksi,
+          tanggal,
+          totalHarga: dataExistItem.harga * result.jumlah,
+          cartId: result.id,
         });
         res.status(201).json({
           msg: `success`,
@@ -116,13 +143,16 @@ class CartController {
       let i = 0;
       let result = '';
 
-      while (req.body[`itemId.${i}`]) {
-        const { ratting, status_barang, tanggal } = req.body;
-        let itemId = req.body[`itemId.${i}`];
+      const { itemList, ratting, status_barang, tanggal } = req.body;
+      let kodeTransaksi =
+        Math.random().toString(16).slice(2) + '-' + new Date().getTime();
+      while (itemList[i]) {
+        let itemId = itemList[i];
+        console.log(itemId);
         const dataExist = await cart.findOne({
           where: { userId, itemId, status_barang: 0, status_pengiriman: 0 },
         });
-        // kalo mau beli barang yang di cart dengan status sb = 0, sp = 0
+        // // kalo mau beli barang yang di cart dengan status sb = 0, sp = 0
         if (dataExist) {
           const dataExistItem = await item.findByPk(itemId);
           if (dataExistItem.stok >= dataExist.jumlah) {
@@ -135,6 +165,7 @@ class CartController {
               }
             );
             let resultTransaksi = await transaksi.create({
+              kode_transaksi: kodeTransaksi,
               tanggal,
               totalHarga: dataExistItem.harga * dataExist.jumlah,
               cartId: dataExist.id,
@@ -168,14 +199,6 @@ class CartController {
       res.status(200).json({
         message: `success`,
       });
-      // result[0] === 1
-      //   ? res.status(200).json({
-      //       message: `success`,
-      //     })
-      //   : // 404 not found
-      //     res.status(404).json({
-      //       message: `not found`,
-      //     });
     } catch (error) {
       res.status(500).json(error);
     }
@@ -258,6 +281,17 @@ class CartController {
       res.status(500).json(error);
     }
   }
+  static async getDataTransaksiUser(req, res) {
+    try {
+      let result = await transaksi.findAll({
+        include: [cart],
+        order: [['id', 'asc']],
+      });
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
 
   static async listCart(req, res) {
     try {
@@ -266,6 +300,20 @@ class CartController {
       const result = await cart.findAll({
         order: [['id', 'asc']],
         where: { userId, status_barang: 0, status_pengiriman: 0 },
+      });
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
+
+  static async listCartTransaction(req, res) {
+    try {
+      // untuk nyari itemnya di looping aja
+      let userId = req.userData.id;
+      const result = await cart.findAll({
+        order: [['id', 'asc']],
+        where: { userId, status_barang: 1, status_pengiriman: 0 },
       });
       res.status(200).json(result);
     } catch (error) {

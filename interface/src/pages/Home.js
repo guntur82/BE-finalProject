@@ -116,54 +116,52 @@ const Home = () => {
                           status_barang,
                           status_pengiriman,
                         } = carts;
-                        if (status_barang === 1) {
-                          return (
-                            <StyledTableRow key={id}>
-                              <StyledTableCell align="center">
-                                {key + 1 + page * 5}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
-                                {carts.user.name}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
-                                {carts.item.name}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
-                                {tanggal}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
-                                {jumlah}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
-                                {status_pengiriman === 0 ? (
-                                  <AiOutlineQuestion />
-                                ) : (
-                                  <FiCheck />
-                                )}
-                              </StyledTableCell>
-                              <StyledTableCell>
-                                {status_pengiriman === 0 ? (
-                                  <>
-                                    <button
-                                      onClick={() => approveHandler(+id)}
-                                      className="btn btn-sm btn-primary"
-                                    >
-                                      Terima
-                                    </button>
-                                    <button
-                                      onClick={() => deleteHandler(+id)}
-                                      className="btn btn-sm btn-danger"
-                                    >
-                                      Tolak
-                                    </button>
-                                  </>
-                                ) : (
-                                  <>-</>
-                                )}
-                              </StyledTableCell>
-                            </StyledTableRow>
-                          );
-                        }
+                        return (
+                          <StyledTableRow key={id}>
+                            <StyledTableCell align="center">
+                              {key + 1 + page * 5}
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              {carts.user.name}
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              {carts.item.name}
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              {tanggal}
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              {jumlah}
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              {status_pengiriman === 0 ? (
+                                <AiOutlineQuestion />
+                              ) : (
+                                <FiCheck />
+                              )}
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              {status_pengiriman === 0 ? (
+                                <>
+                                  <button
+                                    onClick={() => approveHandler(+id)}
+                                    className="btn btn-sm btn-primary"
+                                  >
+                                    Terima
+                                  </button>
+                                  <button
+                                    onClick={() => deleteHandler(+id)}
+                                    className="btn btn-sm btn-danger"
+                                  >
+                                    Tolak
+                                  </button>
+                                </>
+                              ) : (
+                                <>-</>
+                              )}
+                            </StyledTableCell>
+                          </StyledTableRow>
+                        );
                       })
                   ) : (
                     <LoadingBar />

@@ -7,7 +7,7 @@ const getCart = async (cb) => {
   try {
     let result = await axios({
       method: 'GET',
-      url: URL,
+      url: URL + '/all',
     });
     cb(result.data);
   } catch (error) {
